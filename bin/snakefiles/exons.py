@@ -45,7 +45,7 @@ rule exons_find_exons:
             size   = config["exons"]["size"]
         )
     output:
-        exons = exons + "exons_raw.fa"
+        exons = exons + "raw.fa"
     params:
         kmer = config["exons"]["kmer"]
     threads:
@@ -66,9 +66,9 @@ rule exons_find_exons:
 
 rule exons_filter_by_length:
     input:
-        exons_raw = exons + "exons_raw.fa"
+        exons_raw = exons + "raw.fa"
     output:
-        exons_out = exons + "exons_filtered_by_length.fa"
+        exons_out = exons + "filtered.fa"
     threads:
         1
     params:

@@ -34,6 +34,14 @@ rule all:
             levels = config["exons"]["levels"],
             size = config["exons"]["size"]
         ),
-        exons + "exons_raw.fa",
-        exons + "exons_filtered_by_length.fa",
-        
+        exons + "raw.fa",
+        exons + "filtered.fa",
+        # bwa
+        bwa + "exome",
+        bwa + "transcriptome",
+        bwa + "genome",
+        expand(
+            bwa + "{input}_vs_{reference}.bam",
+            input = ["raw", "filtered"],
+            reference = ["exome", "transcriptome", "genome"]
+        )

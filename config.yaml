@@ -16,8 +16,15 @@ samples:
         adaptor: data/adaptors/TruSeq3-PE-2.fa
 
 assembly:
-    data/transcriptome/transcript.fa
+    data/reference/transcriptome.fa
 
+reference:
+    exons:
+        data/reference/exome.fa
+    transcriptome:
+        data/reference/transcriptome.fa
+    genome:
+        data/reference/genome.fa
 
 exons:
     kmer: "27"
