@@ -7,8 +7,8 @@ python>=3.5
 samtools
 snakemake
 pyyaml
+numpy
 biopython
 abyss=2.0.1
 bedtools
 pigz
-numpy
