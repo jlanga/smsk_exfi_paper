@@ -10,5 +10,3 @@ pushd exon_finder/
 python setup.py test
 pip install --editable .
 popd
-
-popd
