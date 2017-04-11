@@ -18,9 +18,7 @@ rule bwa_index:
         "bwa index "
             "-p {output.mock} "
             "{input.fasta} "
-        "2> {log}"
-
-
+        "2> {log} 1>&2"
 
 
 
