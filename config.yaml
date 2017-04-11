@@ -19,7 +19,7 @@ assembly:
     data/reference/transcriptome.fa
 
 reference:
-    exons:
+    exome:
         data/reference/exome.fa
     transcriptome:
         data/reference/transcriptome.fa

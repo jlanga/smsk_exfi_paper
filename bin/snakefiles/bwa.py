@@ -1,6 +1,6 @@
 rule bwa_index_exome:
     input:
-        fasta = config["reference"]["exons"]
+        fasta = config["reference"]["exome"]
     output:
         mock = touch(bwa + "exome"),
         other_files = expand(
@@ -67,158 +67,18 @@ rule bwa_index_genome:
 
 
 
-rule bwa_raw_vs_exome:
+rule align:
     input:
-        fasta = exons + "raw.fa",
-        reference = bwa + "exome"
+        fasta = exons + "{exon_file}.fa",
+        reference = bwa + "{reference}"
     output:
-        bam = bwa + "raw_vs_exome.bam"
+        bam = bwa + "{exon_file}_vs_{reference}.bam"
     threads:
-        24
+        THREAD_LIMIT
     log:
-        bwa + "raw_vs_exome.log"
+        bwa + "{exon_file}_vs_{reference}.log"
     benchmark:
-        bwa + "raw_vs_exome.json"
-    shell:
-        "(bwa mem "
-            "-t {threads} "
-            "{input.reference} "
-            "{input.fasta} "
-        "| samtools view "
-            "-Shu "
-        "| samtools sort "
-            "-l 9 "
-            "--output-fmt BAM "
-            "-@ {threads} "
-        "> {output.bam}) "
-        "2> {log}"
-
-
-
-rule bwa_raw_vs_transcriptome:
-    input:
-        fasta = exons + "raw.fa",
-        reference = bwa + "transcriptome"
-    output:
-        bam = bwa + "raw_vs_transcriptome.bam"
-    threads:
-        24
-    log:
-        bwa + "raw_vs_transcriptome.log"
-    benchmark:
-        bwa + "raw_vs_transcriptome.json"
-    shell:
-        "(bwa mem "
-            "-t {threads} "
-            "{input.reference} "
-            "{input.fasta} "
-        "| samtools view "
-            "-Shu "
-        "| samtools sort "
-            "-l 9 "
-            "--output-fmt BAM "
-            "-@ {threads} "
-        "> {output.bam}) "
-        "2> {log}"
-
-
-
-rule bwa_raw_vs_genome:
-    input:
-        fasta = exons + "raw.fa",
-        reference = bwa + "genome"
-    output:
-        bam = bwa + "raw_vs_genome.bam"
-    threads:
-        24
-    log:
-        bwa + "raw_vs_genome.log"
-    benchmark:
-        bwa + "raw_vs_genome.json"
-    shell:
-        "(bwa mem "
-            "-t {threads} "
-            "{input.reference} "
-            "{input.fasta} "
-        "| samtools view "
-            "-Shu "
-        "| samtools sort "
-            "-l 9 "
-            "--output-fmt BAM "
-            "-@ {threads} "
-        "> {output.bam}) "
-        "2> {log}"
-
-
-
-rule bwa_filtered_vs_exome:
-    input:
-        fasta = exons + "filtered.fa",
-        reference = bwa + "exome"
-    output:
-        bam = bwa + "filtered_vs_exome.bam"
-    threads:
-        24
-    log:
-        bwa + "filtered_vs_exome.log"
-    benchmark:
-        bwa + "filtered_vs_exome.json"
-    shell:
-        "(bwa mem "
-            "-t {threads} "
-            "{input.reference} "
-            "{input.fasta} "
-        "| samtools view "
-            "-Shu "
-        "| samtools sort "
-            "-l 9 "
-            "--output-fmt BAM "
-            "-@ {threads} "
-        "> {output.bam}) "
-        "2> {log}"
-
-
-
-rule bwa_filtered_vs_transcriptome:
-    input:
-        fasta = exons + "filtered.fa",
-        reference = bwa + "transcriptome"
-    output:
-        bam = bwa + "filtered_vs_transcriptome.bam"
-    threads:
-        24
-    log:
-        bwa + "filtered_vs_transcriptome.log"
-    benchmark:
-        bwa + "filtered_vs_transcriptome.json"
-    shell:
-        "(bwa mem "
-            "-t {threads} "
-            "{input.reference} "
-            "{input.fasta} "
-        "| samtools view "
-            "-Shu "
-        "| samtools sort "
-            "-l 9 "
-            "--output-fmt BAM "
-            "-@ {threads} "
-        "> {output.bam}) "
-        "2> {log}"
-
-
-
-rule bwa_filtered_vs_genome:
-    input:
-        fasta = exons + "filtered.fa",
-        reference = bwa + "genome"
-    output:
-        bam = bwa + "filtered_vs_genome.bam"
-    threads:
-        24
-    log:
-        bwa + "filtered_vs_genome.log"
-    benchmark:
-        bwa + "filtered_vs_genome.json"
+        bwa + "{exon_file}_vs_{reference}.json"
     shell:
         "(bwa mem "
             "-t {threads} "

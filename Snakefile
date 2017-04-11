@@ -7,6 +7,7 @@ dna_pe = [
         config["samples"][sample_name]["molecule"] == "dna"
 ]
 
+THREAD_LIMIT = 64
 
 snakefiles = "bin/snakefiles/"
 
