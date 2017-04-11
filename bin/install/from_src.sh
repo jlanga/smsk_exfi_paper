@@ -8,7 +8,7 @@ pushd src/
 git clone https://github.com/jlanga/exon_finder.git .
 pushd exon_finder/
 python setup.py test
-pip install --user --editable .
+pip install --editable .
 popd
 
 popd
