@@ -1,18 +1,19 @@
-rule bwa_index_exome:
+rule bwa_index:
     input:
-        fasta = config["reference"]["exome"]
+        fasta = lambda wildcards: config["reference"][wildcards.reference]
     output:
-        mock = touch(bwa + "exome"),
+        mock = touch(bwa + "{reference}"),
         other_files = expand(
-            bwa + "exome.{extension}",
-            extension = "ann bwt pac sa".split()
+            bwa + "{reference}.{extension}",
+            extension = "ann bwt pac sa".split(),
+            reference = "{reference}"
         )
     threads:
         1
     log:
-        bwa + "index_exome.log"
+        bwa + "index_{reference}.log"
     benchmark:
-        bwa + "index_exome.json"
+        bwa + "index_{reference}.json"
     shell:
         "bwa index "
             "-p {output.mock} "
@@ -21,53 +22,9 @@ rule bwa_index_exome:
 
 
 
-rule bwa_index_transcriptome:
-    input:
-        fasta = config["reference"]["transcriptome"]
-    output:
-        mock = touch(bwa + "transcriptome"),
-        other_files = expand(
-            bwa + "transcriptome.{extension}",
-            extension = "amb ann bwt pac sa".split()
-        )
-    threads:
-        1
-    log:
-        bwa + "index_transcriptome.log"
-    benchmark:
-        bwa + "index_transcriptome.json"
-    shell:
-        "bwa index "
-            "-p {output.mock} "
-            "{input.fasta} "
-        "2> {log}"
 
 
-
-rule bwa_index_genome:
-    input:
-        fasta = config["reference"]["genome"]
-    output:
-        mock = touch(bwa + "genome"),
-        other_files = expand(
-            bwa + "genome.{extension}",
-            extension = "ann bwt pac sa".split()
-        )
-    threads:
-        1
-    log:
-        bwa + "index_genome.log"
-    benchmark:
-        bwa + "index_genome.json"
-    shell:
-        "bwa index "
-            "-p {output.mock} "
-            "{input.fasta} "
-        "2> {log}"
-
-
-
-rule align:
+rule bwa_align:
     input:
         fasta = exons + "{exon_file}.fa",
         reference = bwa + "{reference}"
