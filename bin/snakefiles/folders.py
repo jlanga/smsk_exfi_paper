@@ -1,3 +1,3 @@
-raw = "results/raw/"
+raw =   "results/raw/"
 exons = "results/exons/"
-bwa = "results/bwa/"
+bwa =   "results/bwa/"

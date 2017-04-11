@@ -11,6 +11,7 @@ dna_pe = [
 snakefiles = "bin/snakefiles/"
 
 include: snakefiles + "folders.py"
+include: snakefiles + "generic.py"
 #include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exons.py"
@@ -41,7 +42,7 @@ rule all:
         bwa + "transcriptome",
         bwa + "genome",
         expand(
-            bwa + "{input}_vs_{reference}.bam",
+            bwa + "{input}_vs_{reference}.bam.bai",
             input = ["raw", "filtered"],
             reference = ["exome", "transcriptome", "genome"]
         )
