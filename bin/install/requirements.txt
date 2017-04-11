@@ -11,3 +11,4 @@ biopython
 abyss=2.0.1
 bedtools
 pigz
+numpy
