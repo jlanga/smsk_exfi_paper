@@ -11,5 +11,7 @@ before_install:
 
 script:
   - bash bin/install/conda_env.sh
-  - source activate smsk
-  - snakemake 
+  - bash bin/install/from_src.sh
+  - source activate smsk_exfi
+  - bash bin/simulate_dna.sh
+  - snakemake -j 2
