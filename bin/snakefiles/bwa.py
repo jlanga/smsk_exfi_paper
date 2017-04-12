@@ -2,11 +2,15 @@ rule bwa_index:
     input:
         fasta = lambda wildcards: config["reference"][wildcards.reference]
     output:
-        mock = touch(bwa + "{reference}"),
-        other_files = expand(
-            bwa + "{reference}.{extension}",
-            extension = "ann bwt pac sa".split(),
-            reference = "{reference}"
+        mock = protected(
+            touch(bwa + "{reference}")
+        ),
+        other_files = protected(
+            expand(
+                bwa + "{reference}.{extension}",
+                extension = "ann bwt pac sa".split(),
+                reference = "{reference}"
+            )
         )
     threads:
         1
