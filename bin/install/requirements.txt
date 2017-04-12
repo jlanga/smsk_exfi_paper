@@ -12,3 +12,5 @@ biopython
 abyss=2.0.1
 bedtools
 pigz
+r-tidyverse
+r-ggplot2
