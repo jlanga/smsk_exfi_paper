@@ -6,11 +6,13 @@ rule exons_build_bloom_filter:
             end = "1 2".split()
         )
     output:
-        bloom_filter = expand(
-            exons + "k{kmer}_l{levels}_m{size}.bloom",
-            kmer   = config["exons"]["kmer"],
-            levels = config["exons"]["levels"],
-            size   = config["exons"]["size"]
+        bloom_filter = protected(
+                expand(
+                exons + "k{kmer}_l{levels}_m{size}.bloom",
+                kmer   = config["exons"]["kmer"],
+                levels = config["exons"]["levels"],
+                size   = config["exons"]["size"]
+            )
         )
     params:
         kmer   = config["exons"]["kmer"],
