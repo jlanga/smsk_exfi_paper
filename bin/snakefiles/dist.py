@@ -11,4 +11,4 @@ rule dist_plot:
     benchmark:
         dist + "plot.json"
     shell:
-        "Rscript bin/plot_exon_length_distribution.R 2> {log}"
+        "Rscript bin/plot_exon_length_distribution.R"
