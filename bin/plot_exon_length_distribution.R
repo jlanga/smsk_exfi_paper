@@ -32,7 +32,8 @@ library(ggplot2)
 
 q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) + 
     geom_histogram(position="dodge", bins= 100) +
-    scale_x_log10()
+    scale_x_log10()+
+    scale_y_log10()
 ggsave(q, filename = "results/dist/exon_histogram.pdf", device = "pdf")
 
 q <- ggplot(data = exons, aes(x = exon_length, color = label)) + 
