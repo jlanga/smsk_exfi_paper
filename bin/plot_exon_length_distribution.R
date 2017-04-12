@@ -31,7 +31,7 @@ exons <- rbind(raw_exons, filtered_exons, true_exons)
 library(ggplot2)
 
 q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) + 
-    geom_histogram(position="dodge") +
+    geom_histogram(position="dodge", bins= 100) +
     scale_x_log10()
 ggsave(q, filename = "results/dist/exon_histogram.pdf", device = "pdf")
 
