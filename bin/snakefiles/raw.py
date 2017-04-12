@@ -38,14 +38,26 @@ rule raw_link_assembly:
 
 
 
-rule raw_index_assembly:
+# rule raw_index_assembly:
+#     input:
+#         fasta= raw + "transcriptome.fa"
+#     output:
+#         fai= raw + "transcriptome.fa.fai"
+#     log:
+#         raw + "index_assembly.log"
+#     benchmark:
+#         raw + "index_assembly.json"
+#     shell:
+#         "samtools faidx {input.fasta} 2> {log}"
+
+
+rule raw_link_exome:
     input:
-        fasta= raw + "transcriptome.fa"
+        fasta = config["reference"]["exome"]
     output:
-        fai= raw + "transcriptome.fa.fai"
-    log:
-        raw + "index_assembly.log"
-    benchmark:
-        raw + "index_assembly.json"
-    shell:
-        "samtools faidx {input.fasta} 2> {log}"
+        fasta = raw + "exome.fa"
+    shell: 
+        "ln "
+            "--symbolic "
+            "$(readlink --canonicalize {input.fasta}) "
+            "{output.fasta}"

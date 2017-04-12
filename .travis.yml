@@ -17,4 +17,4 @@ before_install:
 script:
   - source activate smsk_exfi
   - bash bin/simulate_dna.sh
-  - snakemake -j 2
+  - snakemake -j

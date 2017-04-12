@@ -18,7 +18,7 @@ filtered_exons <- "results/exons/filtered.fa.fai" %>%
     select(exon_id = X1, exon_length = X2) %>%
     mutate(label = "Filtered exons")
 
-true_exons <- "data/reference/exome.fa.fai"  %>%
+true_exons <- "results/raw/exome.fa.fai"  %>%
     read_tsv(
         file = .,
         col_names = FALSE
@@ -31,9 +31,11 @@ exons <- rbind(raw_exons, filtered_exons, true_exons)
 library(ggplot2)
 
 q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) + 
-    geom_histogram(position="dodge")
+    geom_histogram(position="dodge") +
+    scale_x_log10()
 ggsave(q, filename = "results/dist/exon_histogram.pdf", device = "pdf")
 
 q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) + 
-    geom_density()
+    geom_density() +
+    scale_x_log10()
 ggsave(q, filename = "results/dist/exon_density.pdf", device = "pdf")
