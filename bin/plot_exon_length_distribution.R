@@ -35,7 +35,7 @@ q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) +
     scale_x_log10()
 ggsave(q, filename = "results/dist/exon_histogram.pdf", device = "pdf")
 
-q <- ggplot(data = exons, aes(x = exon_length, fill= label, color = label)) + 
+q <- ggplot(data = exons, aes(x = exon_length, color = label)) + 
     geom_density() +
     scale_x_log10()
 ggsave(q, filename = "results/dist/exon_density.pdf", device = "pdf")
