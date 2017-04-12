@@ -2,7 +2,10 @@ dist: trusty
 
 language: bash
 
-cache: pip
+cache: 
+  pip: true
+  directories:
+     - $HOME/miniconda3
 
 before_install:
   - sudo apt-get -qq update
