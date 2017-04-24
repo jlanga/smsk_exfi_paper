@@ -2,7 +2,7 @@ rule dist_plot:
     input:
         raw_fai = exons + "raw.fa.fai",
         length_fai = exons + "filtered_by_length.fa.fai",
-        extensibility_fai = exons + "filtered_by_extensibility.fa.fai"
+        extensibility_fai = exons + "filtered_by_extensibility.fa.fai",
         true_fai = raw + "exome.fa.fai"
     output:
         dist + "exon_histogram.pdf",

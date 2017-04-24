@@ -1,4 +1,5 @@
 rule clean:
     shell:
-        "rm -r " +
-            dist + bwa + exons + raw
+        "rm -r " + " ".join([
+            dist, bwa, exons, raw
+        ])

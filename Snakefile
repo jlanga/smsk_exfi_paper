@@ -49,7 +49,7 @@ rule all:
         #bwa + "genome",
         expand(
             bwa + "{input}_vs_{reference}.bam.bai",
-            input = ["raw", "filtered"],
+            input = ["raw", "filtered_by_length", "filtered_by_extensibility"],
             reference = ["exome", "transcriptome", "genome"]
         ),
         ## dist
