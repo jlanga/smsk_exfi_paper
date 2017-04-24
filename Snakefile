@@ -9,14 +9,14 @@ dna_pe = [
         if config["samples"][sample_name]["type"] == "PE" and 
         config["samples"][sample_name]["molecule"] == "dna"
 ]
-THREAD_LIMIT = 64
+THREAD_LIMIT = 4
 
 
 # Read subsnakefiles
 snakefiles = "bin/snakefiles/"
 include: snakefiles + "folders.py"
 include: snakefiles + "generic.py"
-#include: snakefiles + "clean.py"
+include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exons.py"
 include: snakefiles + "bwa.py"
@@ -41,7 +41,8 @@ rule all:
         #    size = config["exons"]["size"]
         #),
         #exons + "raw.fa.fai",
-        #exons + "filtered.fa.fai",
+        #exons + "filtered_by_length.fa.fai",
+        #exons + "filtered_by_extensibility.fa.fai"
         # bwa
         #bwa + "exome",
         #bwa + "transcriptome",
