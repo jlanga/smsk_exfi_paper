@@ -15,3 +15,4 @@ pigz
 r-base
 r-tidyverse
 r-ggplot2
+multiqc
