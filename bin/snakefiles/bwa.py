@@ -51,3 +51,40 @@ rule bwa_align:
             "-@ {threads} "
         "> {output.bam}) "
         "2> {log}"
+
+
+
+rule bwa_stats:
+    input:
+        bam = bwa + "{exon_file}_vs_{reference}.bam"
+    output:
+        stats= bwa + "{exon_file}_vs_{reference}.stats"
+    shell:
+        "samtools stats {input.bam} > {output.stats}"
+
+
+
+rule bwa_report:
+    input:
+        stats = expand(
+            bwa + "{exon_file}_vs_{reference}.stats",
+            exon_file = ["raw", "filtered_by_length", "filtered_by_extensibility"],
+            reference = "{reference}"
+        )
+    output:
+        list_stats = temp(
+            bwa + "list_{reference}.tsv"
+        ),
+        report = bwa + "report_{reference}.html"
+    params:
+        name = bwa + "report_{reference}"
+    log:
+        bwa + "report_{reference}.log"
+    benchmark:  
+        bwa + "report_{reference}.json"
+    shell:
+        "(ls -1 {input.stats} > {output.list_stats}; "
+        "multiqc "
+            "--filename {params.name} "
+            "--file-list {output.list_stats}) "
+        "2> {log}"

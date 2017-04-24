@@ -52,6 +52,10 @@ rule all:
             input = ["raw", "filtered_by_length", "filtered_by_extensibility"],
             reference = ["exome", "transcriptome", "genome"]
         ),
+        expand(
+            bwa + "report_{reference}.html",
+            reference = ["exome", "transcriptome", "genome"]
+        ),
         ## dist
         dist + "exon_histogram.pdf",
         dist + "exon_density.pdf",
