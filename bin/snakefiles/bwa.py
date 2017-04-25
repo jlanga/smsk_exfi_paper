@@ -60,7 +60,7 @@ rule bwa_stats:
     output:
         stats= bwa + "{exon_file}_vs_{reference}.stats"
     shell:
-        "samtools stats {input.bam} > {output.stats}"
+        "bamtools stats -in {input.bam} > {output.stats}"
 
 
 
