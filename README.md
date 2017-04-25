@@ -1,4 +1,4 @@
-# exfi_validatoion: A Snakemake workflow to validate exfi's performance
+# exfi_validation: A Snakemake workflow to validate exfi's performance
 
 [![Build Status](https://travis-ci.org/jlanga/exfi_validation.svg?branch=master)](https://travis-ci.org/jlanga/exfi_validation)
 
