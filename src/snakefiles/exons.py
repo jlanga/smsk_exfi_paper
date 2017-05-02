@@ -39,7 +39,8 @@ rule exons_build_bloom_filter:
 
 rule exons_find_exons:
     input:
-        transcriptome = raw + "transcriptome.fa",
+        transcriptome = raw + "assembly.fa",
+        fai = raw + "assembly.fa.fai",
         bloom_filter = expand(
             exons + "k{kmer}_l{levels}_m{size}.bloom",
             kmer   = config["exons"]["kmer"],

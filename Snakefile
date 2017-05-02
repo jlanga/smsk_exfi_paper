@@ -1,5 +1,5 @@
 shell.prefix("set -euo pipefail;")
-configfile: "config.yaml"
+configfile: "src/config.yaml"
 
 
 
@@ -13,7 +13,7 @@ THREAD_LIMIT = 4
 
 
 # Read subsnakefiles
-snakefiles = "bin/snakefiles/"
+snakefiles = "src/snakefiles/"
 include: snakefiles + "folders.py"
 include: snakefiles + "generic.py"
 include: snakefiles + "clean.py"

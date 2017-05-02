@@ -16,7 +16,7 @@ length_exons <- "results/exons/filtered_by_length.fa.fai" %>%
         col_names = FALSE
     ) %>%
     select(exon_id = X1, exon_length = X2) %>%
-    mutate(label = "Filtered  by legth exons")
+    mutate(label = "Filtered  by length exons")
 
 extensibility_exons <- "results/exons/filtered_by_extensibility.fa.fai" %>%
     read_tsv(

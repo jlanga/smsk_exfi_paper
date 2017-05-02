@@ -12,8 +12,6 @@ rule bwa_index:
                 reference = "{reference}"
             )
         )
-    threads:
-        1
     log:
         bwa + "index_{reference}.log"
     benchmark:

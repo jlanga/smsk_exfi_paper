@@ -1,0 +1,6 @@
+## 2017-05-02
+
+* Moved bin -> src
+* Moved requirements to front
+* Added changelog
+* Modified raw rules
