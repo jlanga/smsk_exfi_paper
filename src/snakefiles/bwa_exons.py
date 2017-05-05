@@ -27,7 +27,7 @@ rule bwa_exons_index:
 rule bwa_exons_align:
     input:
         forward = lambda wildcards: config["samples"][wildcards.sample]["forward"],
-        reverse = lambda wildcards: config["samples"][wildcards.sample]["forward"],
+        reverse = lambda wildcards: config["samples"][wildcards.sample]["reverse"],
         reference = bwa_exons + "{exons}",
     output:
         bam = bwa_exons+ "{sample}_vs_{exons}.bam"
