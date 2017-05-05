@@ -37,7 +37,7 @@ rule bwa_align:
     benchmark:
         bwa + "{exon_file}_vs_{reference}.json"
     shell:
-        "(bwa mem "
+        "(bwa bwasw "
             "-t {threads} "
             "{input.reference} "
             "{input.fasta} "
