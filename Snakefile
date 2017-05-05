@@ -19,7 +19,8 @@ include: snakefiles + "generic.py"
 include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exons.py"
-include: snakefiles + "bwa.py"
+include: snakefiles + "bwa_ref.py"
+include: snakefiles + "bwa_exons.py"
 include: snakefiles + "dist.py"
 
 
@@ -43,18 +44,28 @@ rule all:
         #exons + "raw.fa.fai",
         #exons + "filtered_by_length.fa.fai",
         #exons + "filtered_by_extensibility.fa.fai"
-        # bwa
+        # bwa_ref
         #bwa + "exome",
         #bwa + "transcriptome",
         #bwa + "genome",
         expand(
-            bwa + "{input}_vs_{reference}.bam.bai",
+            bwa_ref + "{input}_vs_{reference}.bam.bai",
             input = ["raw", "filtered_by_length", "filtered_by_extensibility"],
             reference = ["exome", "transcriptome", "genome"]
         ),
         expand(
-            bwa + "report_{reference}.html",
+            bwa_ref + "report_{reference}.html",
             reference = ["exome", "transcriptome", "genome"]
+        ),
+        # bwa_exons
+        expand(
+            bwa_exons + "{sample}_vs_{exons}.bam.bai",
+            sample = dna_pe,
+            exons = ["raw", "filtered_by_length", "filtered_by_extensibility"],
+        ),
+        expand(
+            bwa_exons + "report_{exons}.html",
+            exons = ["raw", "filtered_by_length", "filtered_by_extensibility"],
         ),
         ## dist
         dist + "exon_histogram.pdf",

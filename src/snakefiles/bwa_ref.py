@@ -1,21 +1,21 @@
-rule bwa_index:
+rule bwa_ref_index:
     input:
         fasta = lambda wildcards: config["reference"][wildcards.reference]
     output:
         mock = protected(
-            touch(bwa + "{reference}")
+            touch(bwa_ref+ "{reference}")
         ),
         other_files = protected(
             expand(
-                bwa + "{reference}.{extension}",
+                bwa_ref+ "{reference}.{extension}",
                 extension = "ann bwt pac sa".split(),
                 reference = "{reference}"
             )
         )
     log:
-        bwa + "index_{reference}.log"
+        bwa_ref+ "index_{reference}.log"
     benchmark:
-        bwa + "index_{reference}.json"
+        bwa_ref+ "index_{reference}.json"
     shell:
         "bwa index "
             "-p {output.mock} "
@@ -24,18 +24,18 @@ rule bwa_index:
 
 
 
-rule bwa_align:
+rule bwa_ref_align:
     input:
         fasta = exons + "{exon_file}.fa",
-        reference = bwa + "{reference}"
+        reference = bwa_ref+ "{reference}"
     output:
-        bam = bwa + "{exon_file}_vs_{reference}.bam"
+        bam = bwa_ref+ "{exon_file}_vs_{reference}.bam"
     threads:
         THREAD_LIMIT
     log:
-        bwa + "{exon_file}_vs_{reference}.log"
+        bwa_ref+ "{exon_file}_vs_{reference}.log"
     benchmark:
-        bwa + "{exon_file}_vs_{reference}.json"
+        bwa_ref+ "{exon_file}_vs_{reference}.json"
     shell:
         "(bwa bwasw "
             "-t {threads} "
@@ -52,34 +52,34 @@ rule bwa_align:
 
 
 
-rule bwa_stats:
+rule bwa_ref_stats:
     input:
-        bam = bwa + "{exon_file}_vs_{reference}.bam"
+        bam = bwa_ref + "{exon_file}_vs_{reference}.bam"
     output:
-        stats= bwa + "{exon_file}_vs_{reference}.stats"
+        stats= bwa_ref + "{exon_file}_vs_{reference}.stats"
     shell:
         "bamtools stats -in {input.bam} > {output.stats}"
 
 
 
-rule bwa_report:
+rule bwa_ref_report:
     input:
         stats = expand(
-            bwa + "{exon_file}_vs_{reference}.stats",
+            bwa_ref+ "{exon_file}_vs_{reference}.stats",
             exon_file = ["raw", "filtered_by_length", "filtered_by_extensibility"],
             reference = "{reference}"
         )
     output:
         list_stats = temp(
-            bwa + "list_{reference}.tsv"
+            bwa_ref+ "list_{reference}.tsv"
         ),
-        report = bwa + "report_{reference}.html"
+        report = bwa_ref+ "report_{reference}.html"
     params:
-        name = bwa + "report_{reference}"
+        name = bwa_ref+ "report_{reference}"
     log:
-        bwa + "report_{reference}.log"
+        bwa_ref+ "report_{reference}.log"
     benchmark:  
-        bwa + "report_{reference}.json"
+        bwa_ref+ "report_{reference}.json"
     shell:
         "(ls -1 {input.stats} > {output.list_stats}; "
         "multiqc "
