@@ -1,4 +1,5 @@
 raw =   "results/raw/"
 exons = "results/exons/"
-bwa =   "results/bwa/"
+bwa_ref = "results/bwa_ref/"
+bwa_exons = "results/bwa_exons/"
 dist = "results/dist/"
