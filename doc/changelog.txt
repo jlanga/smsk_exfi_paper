@@ -1,3 +1,8 @@
+## 2017-05-05
+
+* Mapping also reads to exons, generating reports, separating between mapping exons and mapping reads
+* Mapping exons with bwa bwasw instead of bwa mem
+
 ## 2017-05-02
 
 * Moved bin -> src
