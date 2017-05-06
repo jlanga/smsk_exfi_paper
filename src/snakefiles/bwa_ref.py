@@ -41,8 +41,6 @@ rule bwa_ref_align:
             "-t {threads} "
             "{input.reference} "
             "{input.fasta} "
-        "| samtools view "
-            "-Shu "
         "| samtools sort "
             "-l 9 "
             "--output-fmt BAM "
