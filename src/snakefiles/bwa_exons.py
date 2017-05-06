@@ -43,8 +43,6 @@ rule bwa_exons_align:
             "{input.reference} "
             "{input.forward} "
             "{input.reverse} "
-        "| samtools view "
-            "-Shu "
         "| samtools sort "
             "-l 9 "
             "--output-fmt BAM "
