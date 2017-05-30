@@ -30,3 +30,6 @@ script:
   - source activate exfi_validation
   - bash src/simulate_dna.sh
   - snakemake -j
+
+after_failure:
+  - cat results/exons/build_bloom_filter.log
