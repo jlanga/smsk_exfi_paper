@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p src/
+mkdir -p bin/
 
 pushd src/
 
@@ -11,4 +12,13 @@ python setup.py test
 pip install --editable .
 popd
 
+
+
+# biobloomtools via github
+git clone https://github.com/bcgsc/biobloom biobloom
+pushd biobloom/
+./autogen.sh
+./configure
+make -j
+cp BioBloomMaker/biobloommaker BioBloomCategorizer/biobloomcategorizer ../../bin/
 popd

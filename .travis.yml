@@ -14,6 +14,7 @@ before_install:
   - export PATH="/home/travis/miniconda3/bin:$PATH"
   - bash src/install/conda_env.sh
   - bash src/install/from_src.sh
+  - export PATH="$PWD/bin:$PATH"
 script:
   - source activate exfi_validation
   - bash src/simulate_dna.sh

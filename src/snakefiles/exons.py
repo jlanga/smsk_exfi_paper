@@ -1,5 +1,6 @@
-rule exons_build_bloom_filter:
+rule exons_build_baited_bloom_filter:
     input:
+        transcriptome = raw + "assembly.fa",
         fq_gz = expand(
             raw + "{sample}_{end}.fq.gz",
             sample = dna_pe,
@@ -25,14 +26,14 @@ rule exons_build_bloom_filter:
     benchmark:
         exons + "build_bloom_filter.json"
     shell:
-        "abyss-bloom build "
-            "--kmer={params.kmer} "
-            "--verbose "
+        "build_baited_bloom_filter "
+            "--input-fasta {input.transcriptome} "
+            "--kmer {params.kmer} "
             "--bloom-size={params.size} "
             "--threads={threads} "
             "--levels={params.levels} "
-            "{output.bloom_filter} "
-            "<(pigz --decompress --stdout {input.fq_gz}) "
+            "--output-bloom {output.bloom_filter} "
+            "{input.fq_gz} "
         "2> {log}"
 
 
