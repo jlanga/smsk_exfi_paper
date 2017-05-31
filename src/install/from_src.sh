@@ -20,5 +20,7 @@ pushd biobloom/
 ./autogen.sh
 ./configure
 make -j
-cp BioBloomMaker/biobloommaker BioBloomCategorizer/biobloomcategorizer ../../bin/
+cp \
+    BioBloomMaker/biobloommaker \
+    BioBloomCategorizer/biobloomcategorizer ../../bin/
 popd

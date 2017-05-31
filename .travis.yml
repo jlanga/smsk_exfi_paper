@@ -23,13 +23,13 @@ before_install:
 
 install:
   - bash src/install/conda_env.sh
+  - source activate exfi_validation
   - bash src/install/from_src.sh
   - export PATH="$PWD/bin:$PATH"
 
 script:
-  - source activate exfi_validation
   - bash src/simulate_dna.sh
   - snakemake -j
 
 after_failure:
-  - cat results/exons/build_bloom_filter.log
+  - cat results/exons/find_exons.log
