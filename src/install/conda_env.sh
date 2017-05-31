@@ -9,6 +9,6 @@ fi
 if [ ! -e $HOME/miniconda3/envs/exfi_validation ] ; then
     conda env create --name exfi_validation --file requirements.txt
 else
-    conda env remove -n exfi_validation
-    conda env create --name exfi_validation --file requirements.txt
+    source activate exfi_validation
+    conda install --yes --file requirements.txt
 fi
