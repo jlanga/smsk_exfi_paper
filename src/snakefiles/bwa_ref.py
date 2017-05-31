@@ -1,6 +1,6 @@
 rule bwa_ref_index:
     input:
-        fasta = lambda wildcards: config["reference"][wildcards.reference]
+        fasta = raw + "{reference}.fa"
     output:
         mock = protected(
             touch(bwa_ref+ "{reference}")
@@ -78,7 +78,7 @@ rule bwa_ref_report:
         name = bwa_ref+ "report_{reference}"
     log:
         bwa_ref+ "report_{reference}.log"
-    benchmark:  
+    benchmark:
         bwa_ref+ "report_{reference}.json"
     shell:
         "(ls -1 {input.stats} > {output.list_stats}; "

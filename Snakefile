@@ -6,7 +6,7 @@ configfile: "src/config.yaml"
 # Some variables
 dna_pe = [
     sample_name for sample_name in config["samples"]
-        if config["samples"][sample_name]["type"] == "PE" and 
+        if config["samples"][sample_name]["type"] == "PE" and
         config["samples"][sample_name]["molecule"] == "dna"
 ]
 THREAD_LIMIT = 4
@@ -51,11 +51,11 @@ rule all:
         expand(
             bwa_ref + "{input}_vs_{reference}.bam.bai",
             input = ["raw", "filtered_by_length", "filtered_by_extensibility"],
-            reference = ["exome", "transcriptome", "genome"]
+            reference = ["exome_reduced", "transcriptome", "genome"]
         ),
         expand(
             bwa_ref + "report_{reference}.html",
-            reference = ["exome", "transcriptome", "genome"]
+            reference = ["exome_reduced", "transcriptome", "genome"]
         ),
         # bwa_exons
         expand(
