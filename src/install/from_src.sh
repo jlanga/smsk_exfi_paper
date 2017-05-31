@@ -9,7 +9,7 @@ pushd src/
 git clone https://github.com/jlanga/exfi.git
 pushd exfi/
 python setup.py test
-pip install --no-deps
+pip install . --no-deps --upgrade
 popd
 
 
