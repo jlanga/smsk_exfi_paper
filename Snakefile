@@ -9,7 +9,7 @@ dna_pe = [
         if config["samples"][sample_name]["type"] == "PE" and
         config["samples"][sample_name]["molecule"] == "dna"
 ]
-THREAD_LIMIT = 4
+THREAD_LIMIT = 64
 
 
 # Read subsnakefiles
