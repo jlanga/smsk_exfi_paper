@@ -42,7 +42,7 @@ rule bwa_ref_align:
             "{input.reference} "
             "{input.fasta} "
         "| samtools view "
-            "-Shu "
+            "-F4 -h "
         "| samtools sort "
             "-l 9 "
             "--output-fmt BAM "

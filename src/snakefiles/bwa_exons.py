@@ -44,7 +44,7 @@ rule bwa_exons_align:
             "{input.forward} "
             "{input.reverse} "
         "| samtools view "
-            "-Shu "
+            "-F4 -h "
         "| samtools sort "
             "-l 9 "
             "--output-fmt BAM "
@@ -80,7 +80,7 @@ rule bwa_exons_report:
         name = bwa_exons+ "report_{exons}"
     log:
         bwa_exons+ "report_{exons}.log"
-    benchmark:  
+    benchmark:
         bwa_exons+ "report_{exons}.json"
     shell:
         "(ls -1 {input.stats} > {output.list_stats}; "
