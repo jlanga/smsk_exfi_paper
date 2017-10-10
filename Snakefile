@@ -18,7 +18,7 @@ include: snakefiles + "folders.py"
 include: snakefiles + "generic.py"
 include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
-include: snakefiles + "exons.py"
+include: snakefiles + "exfi.py"
 include: snakefiles + "bwa_ref.py"
 include: snakefiles + "bwa_exons.py"
 include: snakefiles + "dist.py"
@@ -36,36 +36,36 @@ rule all:
         #raw + "transcriptome.fa.fai",
         ## exfi
         #expand(
-        #    exons + "k{kmer}_l{levels}_m{size}.bloom",
+        #    exfi + "k{kmer}_l{levels}_m{size}.bloom",
         #    kmer = config["exons"]["kmer"],
         #    levels = config["exons"]["levels"],
         #    size = config["exons"]["size"]
         #),
-        #exons + "raw.fa.fai",
-        #exons + "filtered_by_length.fa.fai",
-        #exons + "filtered_by_extensibility.fa.fai"
+        #exfi + "raw.fa.fai",
+        #exfi + "filtered_by_length.fa.fai",
+        #exfi + "filtered_by_extensibility.fa.fai"
         # bwa_ref
         #bwa + "exome",
         #bwa + "transcriptome",
         #bwa + "genome",
-        expand(
-            bwa_ref + "{input}_vs_{reference}.bam.bai",
-            input = ["raw", "filtered_by_length", "filtered_by_extensibility"],
-            reference = ["exome_reduced", "transcriptome", "genome"]
-        ),
+        # expand(
+        #     bwa_ref + "{input}_vs_{reference}.bam.bai",
+        #     input = ["exons"],
+        #     reference = ["exome", "transcriptome", "genome"]
+        # ),
         expand(
             bwa_ref + "report_{reference}.html",
-            reference = ["exome_reduced", "transcriptome", "genome"]
+            reference = ["exome", "transcriptome", "genome"]
         ),
-        # bwa_exons
+        # # bwa_exons
+        # expand(
+        #     bwa_exfi + "{sample}_vs_{exons}.bam.bai",
+        #     sample = dna_pe,
+        #     exons = ["exons"],
+        # ),
         expand(
-            bwa_exons + "{sample}_vs_{exons}.bam.bai",
-            sample = dna_pe,
-            exons = ["raw", "filtered_by_length", "filtered_by_extensibility"],
-        ),
-        expand(
-            bwa_exons + "report_{exons}.html",
-            exons = ["raw", "filtered_by_length", "filtered_by_extensibility"],
+            bwa_exfi + "report_{exons}.html",
+            exons = ["exons"],
         ),
         ## dist
         dist + "exon_histogram.pdf",

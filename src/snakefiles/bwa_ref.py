@@ -26,7 +26,7 @@ rule bwa_ref_index:
 
 rule bwa_ref_align:
     input:
-        fasta = exons + "{exon_file}.fa",
+        fasta = exfi + "{exon_file}.fa",
         reference = bwa_ref+ "{reference}"
     output:
         bam = bwa_ref+ "{exon_file}_vs_{reference}.bam"
@@ -66,7 +66,7 @@ rule bwa_ref_report:
     input:
         stats = expand(
             bwa_ref+ "{exon_file}_vs_{reference}.stats",
-            exon_file = ["raw", "filtered_by_length", "filtered_by_extensibility"],
+            exon_file = ["exons"],
             reference = "{reference}"
         )
     output:
