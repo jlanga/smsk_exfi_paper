@@ -7,6 +7,7 @@ cache:
   directories:
     - $HOME/miniconda3 # Add the installation to TRAVIS cache.
     - $HOME/download # Sufficient to add miniconda.sh to TRAVIS cache.
+    - /opt/
 
 matrix:
   include:
@@ -27,7 +28,7 @@ matrix:
 
 before_install:
   - bash .travis/travis_before_install.sh
-  - export PATH="$HOME/miniconda3/bin:$PATH"
+  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
 
 install:
   - bash src/install/conda_env.sh
@@ -36,6 +37,8 @@ install:
   - export PATH="$PWD/bin:$PATH"
 
 script:
+  - echo $PATH
+  - python3 --version
   - bash src/simulate_dna.sh
   - snakemake -j
 
