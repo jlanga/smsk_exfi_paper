@@ -1,6 +1,6 @@
 rule bwa_ref_index:
     input:
-        fasta = lambda wildcards: config["reference"][wildcards.reference]
+        fasta = raw + "{reference}.fa"
     output:
         mock = protected(
             touch(bwa_ref+ "{reference}")
@@ -26,7 +26,7 @@ rule bwa_ref_index:
 
 rule bwa_ref_align:
     input:
-        fasta = exons + "{exon_file}.fa",
+        fasta = exfi + "{exon_file}.fa",
         reference = bwa_ref+ "{reference}"
     output:
         bam = bwa_ref+ "{exon_file}_vs_{reference}.bam"
@@ -41,6 +41,8 @@ rule bwa_ref_align:
             "-t {threads} "
             "{input.reference} "
             "{input.fasta} "
+        "| samtools view "
+            "-F4 -h "
         "| samtools sort "
             "-l 9 "
             "--output-fmt BAM "
@@ -64,7 +66,7 @@ rule bwa_ref_report:
     input:
         stats = expand(
             bwa_ref+ "{exon_file}_vs_{reference}.stats",
-            exon_file = ["raw", "filtered_by_length", "filtered_by_extensibility"],
+            exon_file = ["exons"],
             reference = "{reference}"
         )
     output:
@@ -76,7 +78,7 @@ rule bwa_ref_report:
         name = bwa_ref+ "report_{reference}"
     log:
         bwa_ref+ "report_{reference}.log"
-    benchmark:  
+    benchmark:
         bwa_ref+ "report_{reference}.json"
     shell:
         "(ls -1 {input.stats} > {output.list_stats}; "

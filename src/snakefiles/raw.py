@@ -55,6 +55,18 @@ rule raw_link_exome:
 
 
 
+# rule raw_reduce_exome:
+#     input:
+#         fasta = raw + "exome.fa"
+#     output:
+#         fasta = raw + "exome_reduced.fa"
+#     shell:
+#         "reduce_exons "
+#             "--input-fasta {input.fasta} "
+#             "--output-fasta {output.fasta}"
+
+
+
 rule raw_link_transcriptome:
     input:
         fasta= config["reference"]["transcriptome"]

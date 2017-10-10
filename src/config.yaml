@@ -26,11 +26,10 @@ reference:
     genome:
         data/reference/genome.fa
 
-exons:
+exfi:
     kmer: "27"
     levels: "1"
     size: "500M"
-    trim_left: 1
-    trim_right: 1
-
-
+    max_fp_bases: "5"
+    gfa_to_exons_extra: "--soft-mask-overlaps"
+    gfa_to_gapped_transcript_extra: "--soft-mask-overlaps"
