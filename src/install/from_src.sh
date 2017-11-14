@@ -5,17 +5,6 @@ mkdir -p bin/
 
 pushd src/
 
-# exfi package via github
-git clone https://github.com/jlanga/exfi.git
-pushd exfi/
-python3 setup.py test
-pip install . --user --no-deps --upgrade
-popd
-
-
-
-pushd /opt/
-
 # SDSL-lite
 # https://hub.docker.com/r/adamnovak/sequence-graphs/~/dockerfile/
 if [[ ! -d sdsl-lite/ ]]; then
@@ -36,6 +25,13 @@ git submodule update --init && \
 ./configure --prefix=/usr/local/ && \
 make -j 2 && \
 sudo make install && \
+popd
+
+# exfi package via github
+git clone https://github.com/jlanga/exfi.git
+pushd exfi/
+python3 setup.py test
+pip install . --user --no-deps --upgrade
 popd
 
 popd

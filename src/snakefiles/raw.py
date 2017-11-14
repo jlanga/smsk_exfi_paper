@@ -98,3 +98,20 @@ rule raw_link_genome:
             "--symbolic "
             "$(readlink --canonicalize {input.fasta}) "
             "{output.fasta} 2> {log}"
+
+
+rule raw_link_annotation:
+    input:
+        gff3_gz = config["reference"]["annotation"]
+    output:
+        gff3_gz = raw + "annotation.gff3.gz"
+    log:
+        raw + "link_annotation.log"
+    benchmark:
+        raw + "link_annotation.json"
+    shell:
+        "ln "
+            "--symbolic "
+            "$(readlink --canonicalize {input.gff3_gz}) "
+            "{output.gff3_gz} "
+        "2> {log}"

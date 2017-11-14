@@ -22,6 +22,7 @@ include: snakefiles + "exfi.py"
 include: snakefiles + "bwa_ref.py"
 include: snakefiles + "bwa_exons.py"
 include: snakefiles + "dist.py"
+include: snakefiles + "pr.py"
 
 
 
@@ -70,3 +71,5 @@ rule all:
         ## dist
         dist + "exon_histogram.pdf",
         dist + "exon_density.pdf",
+        ## pr
+        pr + "pr.tsv"

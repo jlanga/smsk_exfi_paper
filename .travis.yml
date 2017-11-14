@@ -5,9 +5,8 @@ language: bash
 cache:
   pip: true
   directories:
-    - $HOME/miniconda3 # Add the installation to TRAVIS cache.
+    - $HOME/miniconda3_$TRAVIS_OS_NAME # Add the installation to TRAVIS cache.
     - $HOME/download # Sufficient to add miniconda.sh to TRAVIS cache.
-    - /opt/
 
 matrix:
   include:
@@ -43,4 +42,4 @@ script:
   - snakemake -j
 
 after_failure:
-  - cat results/exons/find_exons.log
+  - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;
