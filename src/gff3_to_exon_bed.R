@@ -5,7 +5,7 @@ args <- commandArgs(trailingOnly=TRUE)
 infile <- args[1]
 outfile <- args[2]
 
-gff_to_bed <- function(path){
+gff3_to_bed <- function(path){
 
     gff_columns <- c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attribute")
 
