@@ -10,7 +10,7 @@ rule pr_gff3_to_exon_bed:
     shell:
         "(Rscript src/gff3_to_exon_bed.R "
             "{input.gff3_gz} "
-        "| bedtools sort "
+        "| sort -k1,1 -k2,2n "
         "> {output.bed}) "
         "2> {log}"
 
@@ -30,7 +30,7 @@ rule pr_exons_to_bed:
         '| tr -d ">" '
         '| tr "-" "\t" '
         '| tr ":" "\t" '
-        '| bedtools sort '
+        '| sort -k1,1 -k2,2n '
         '> {output.bed}) '
         '2> {log}'
 
