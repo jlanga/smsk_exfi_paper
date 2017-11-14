@@ -27,22 +27,22 @@ include: snakefiles + "pr.py"
 rule all:
     input:
         ## raw
-        expand(
-           raw + "{sample}_{end}.fq.gz",
-           sample = dna_pe,
-           end = "1 2".split(" ")
-        ),
-        raw + "transcriptome.fa.fai",
+        # expand(
+        #    raw + "{sample}_{end}.fq.gz",
+        #    sample = dna_pe,
+        #    end = "1 2".split(" ")
+        # ),
+        # raw + "transcriptome.fa.fai",
         ## exfi
-        expand(
-           exfi + "k{kmer}_l{levels}_m{size}.bloom",
-           kmer = config["exfi"]["kmer"],
-           levels = config["exfi"]["levels"],
-           size = config["exfi"]["size"]
-        ),
-        exfi + "splice_graph.gfa",
-        exfi + "exons.fa",
-        exfi + "gapped_transcripts.fa",
+        # expand(
+        #    exfi + "k{kmer}_l{levels}_m{size}.bloom",
+        #    kmer = config["exfi"]["kmer"],
+        #    levels = config["exfi"]["levels"],
+        #    size = config["exfi"]["size"]
+        # ),
+        # exfi + "splice_graph.gfa",
+        # exfi + "exons.fa",
+        # exfi + "gapped_transcripts.fa",
         ## dist
         dist + "exon_histogram.pdf",
         dist + "exon_density.pdf",
