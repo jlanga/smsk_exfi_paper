@@ -14,7 +14,7 @@ gff3_to_bed <- function(path){
             col_names = gff_columns,
             col_types = c("ccciicccc"),
             comment = "#",
-            progress = TRUE,
+            progress = FALSE,
             na = "."
         ) %>%
         select(-c(seqid, source, score, phase)) %>%
