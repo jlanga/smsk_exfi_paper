@@ -178,4 +178,3 @@ dependencies:
 - r-viridislite=0.2.0=r342h3706391_0
 - r-xml2=1.1.1=r342h3ff9a91_0
 prefix: /home/work/.miniconda3/envs/exfi_validation
-
