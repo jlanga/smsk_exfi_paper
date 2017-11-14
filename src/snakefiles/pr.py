@@ -20,7 +20,7 @@ rule pr_exons_to_bed:
     input:
         fasta = exfi + "exons.fa"
     output:
-        bed = pr + "predicted_exons.bed"
+        bed = pr + "pred_exons.bed"
     log:
         pr + "exons_to_bed.log"
     benchmark:
