@@ -43,4 +43,4 @@ script:
   - snakemake -j
 
 after_failure:
-  - cat results/exons/find_exons.log
+  - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;
