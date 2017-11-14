@@ -19,7 +19,6 @@ include: snakefiles + "generic.py"
 include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exfi.py"
-include: snakefiles + "dist.py"
 include: snakefiles + "pr.py"
 
 
@@ -43,8 +42,5 @@ rule all:
         # exfi + "splice_graph.gfa",
         # exfi + "exons.fa",
         # exfi + "gapped_transcripts.fa",
-        ## dist
-        dist + "exon_histogram.pdf",
-        dist + "exon_density.pdf",
         ## pr
         pr + "pr.tsv",
