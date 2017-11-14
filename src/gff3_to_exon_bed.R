@@ -9,8 +9,7 @@ gff3_to_bed <- function(path){
 
     gff_columns <- c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attribute")
 
-
-    raw <- path1 %>%
+    raw <- path %>%
         read_tsv(
             col_names = gff_columns,
             col_types = c("ccciicccc"),
