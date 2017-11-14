@@ -9,7 +9,6 @@ samples:
     dna2:
         forward: data/reads/dna2_1.fq.gz
         reverse: data/reads/dna2_2.fq.gz
-        type: PE
         molecule: dna
         type: PE
         phred: phred33
@@ -25,6 +24,8 @@ reference:
         data/reference/transcriptome.fa
     genome:
         data/reference/genome.fa
+    annotation:
+        data/reference/annotation.gff3
 
 exfi:
     kmer: "27"
@@ -33,3 +34,6 @@ exfi:
     max_fp_bases: "5"
     gfa_to_exons_extra: "--soft-mask-overlaps"
     gfa_to_gapped_transcript_extra: "--soft-mask-overlaps"
+
+pr:
+    fraction_overlap: 0.9
