@@ -20,7 +20,6 @@ include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exfi.py"
 include: snakefiles + "bwa_ref.py"
-include: snakefiles + "bwa_exons.py"
 include: snakefiles + "dist.py"
 include: snakefiles + "pr.py"
 
@@ -64,10 +63,6 @@ rule all:
         #     sample = dna_pe,
         #     exons = ["exons"],
         # ),
-        expand(
-            bwa_exfi + "report_{exons}.html",
-            exons = ["exons"],
-        ),
         ## dist
         dist + "exon_histogram.pdf",
         dist + "exon_density.pdf",
