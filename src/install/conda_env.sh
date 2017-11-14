@@ -1,11 +1,2 @@
-conda config --add channels conda-forge
-conda config --add channels defaults
-conda config --add channels r
-conda config --add channels bioconda
-
-if [ ! -e $HOME/miniconda3/envs/exfi_validation ] ; then
-    conda env create --name exfi_validation --file requirements.txt
-else
-    source activate exfi_validation
-    conda install --yes --file requirements.txt
-fi
+#!/bin/env bash
+conda env update --yes --file environment.yml

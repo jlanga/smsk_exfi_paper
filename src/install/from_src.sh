@@ -3,7 +3,7 @@
 mkdir -p src/
 mkdir -p bin/
 
-pushd /opt/
+pushd src/
 
 # SDSL-lite
 # https://hub.docker.com/r/adamnovak/sequence-graphs/~/dockerfile/
@@ -27,13 +27,11 @@ make -j 2 && \
 sudo make install && \
 popd
 
-popd
-
-pushd src/
-
 # exfi package via github
 git clone https://github.com/jlanga/exfi.git
 pushd exfi/
 python3 setup.py test
 pip install . --user --no-deps --upgrade
+popd
+
 popd
