@@ -19,8 +19,6 @@ include: snakefiles + "generic.py"
 include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exfi.py"
-include: snakefiles + "bwa_ref.py"
-include: snakefiles + "bwa_exons.py"
 include: snakefiles + "dist.py"
 include: snakefiles + "pr.py"
 
@@ -33,43 +31,20 @@ rule all:
         #    raw + "{sample}_{end}.fq.gz",
         #    sample = dna_pe,
         #    end = "1 2".split(" ")
-        #),
-        #raw + "transcriptome.fa.fai",
+        # ),
+        # raw + "transcriptome.fa.fai",
         ## exfi
-        #expand(
+        # expand(
         #    exfi + "k{kmer}_l{levels}_m{size}.bloom",
-        #    kmer = config["exons"]["kmer"],
-        #    levels = config["exons"]["levels"],
-        #    size = config["exons"]["size"]
-        #),
-        #exfi + "raw.fa.fai",
-        #exfi + "filtered_by_length.fa.fai",
-        #exfi + "filtered_by_extensibility.fa.fai"
-        # bwa_ref
-        #bwa + "exome",
-        #bwa + "transcriptome",
-        #bwa + "genome",
-        # expand(
-        #     bwa_ref + "{input}_vs_{reference}.bam.bai",
-        #     input = ["exons"],
-        #     reference = ["exome", "transcriptome", "genome"]
+        #    kmer = config["exfi"]["kmer"],
+        #    levels = config["exfi"]["levels"],
+        #    size = config["exfi"]["size"]
         # ),
-        expand(
-            bwa_ref + "report_{reference}.html",
-            reference = ["exome", "transcriptome", "genome"]
-        ),
-        # # bwa_exons
-        # expand(
-        #     bwa_exfi + "{sample}_vs_{exons}.bam.bai",
-        #     sample = dna_pe,
-        #     exons = ["exons"],
-        # ),
-        expand(
-            bwa_exfi + "report_{exons}.html",
-            exons = ["exons"],
-        ),
+        # exfi + "splice_graph.gfa",
+        # exfi + "exons.fa",
+        # exfi + "gapped_transcripts.fa",
         ## dist
         dist + "exon_histogram.pdf",
         dist + "exon_density.pdf",
         ## pr
-        pr + "pr.tsv"
+        pr + "pr.tsv",
