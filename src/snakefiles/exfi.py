@@ -75,14 +75,12 @@ rule exfi_gfa_to_exons:
         gfa = exfi + "splice_graph.gfa"
     output:
         exons = exfi + "exons.fa"
-    threads:
-        1
     params:
         extra = config["exfi"]["gfa_to_exons_extra"]
     log:
-        exfi + "filter_by_length.log"
+        exfi + "gfa_to_exons.log"
     benchmark:
-        exfi + "filter_by_length.json"
+        exfi + "gfa_to_exons.json"
     shell:
         "gfa_to_exons "
             "--input-gfa {input.gfa} "
@@ -94,19 +92,17 @@ rule exfi_gfa_to_exons:
 
 rule exfi_gfa_to_gapped_transcript:
     input:
-        gfa = exfi + "splice_graph.fa"
+        gfa = exfi + "splice_graph.gfa"
     output:
         transcripts = exfi + "gapped_transcripts.fa"
-    threads:
-        1
     params:
         extra = config["exfi"]["gfa_to_gapped_transcript_extra"]
     log:
-        exfi + "filter_by_length.log"
+        exfi + "gfa_to_gapped_transcripts.log"
     benchmark:
-        exfi + "filter_by_length.json"
+        exfi + "gfa_to_gapped_transcripts.json"
     shell:
-        "gfa_to_gapped_transcript "
+        "gfa_to_gapped_transcripts "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.transcripts} "
             "{params.extra} "
