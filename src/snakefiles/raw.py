@@ -38,20 +38,20 @@ rule raw_link_assembly:
 
 
 
-rule raw_link_exome:
-    input:
-        fasta= config["reference"]["exome"]
-    output:
-        fasta= raw + "exome.fa"
-    log:
-        raw + "link_exome.log"
-    benchmark:
-        raw + "link_exome.json"
-    shell:
-        "ln "
-            "--symbolic "
-            "$(readlink --canonicalize {input.fasta}) "
-            "{output.fasta} 2> {log}"
+# rule raw_link_exome:
+#     input:
+#         fasta= config["reference"]["exome"]
+#     output:
+#         fasta= raw + "exome.fa"
+#     log:
+#         raw + "link_exome.log"
+#     benchmark:
+#         raw + "link_exome.json"
+#     shell:
+#         "ln "
+#             "--symbolic "
+#             "$(readlink --canonicalize {input.fasta}) "
+#             "{output.fasta} 2> {log}"
 
 
 
