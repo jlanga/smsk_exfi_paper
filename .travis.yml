@@ -24,6 +24,7 @@ matrix:
           - bzip2
           - zlib1g
           - libsparsehash-dev
+          - cmake
 
 before_install:
   - bash .travis/travis_before_install.sh

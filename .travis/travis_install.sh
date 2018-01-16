@@ -14,15 +14,13 @@ source activate exfi_validation
 
 pushd /opt/
 
-pushd /opt/
-
 # SDSL-lite
 # https://hub.docker.com/r/adamnovak/sequence-graphs/~/dockerfile/
 if [[ ! -d sdsl-lite/ ]]; then
     git clone https://github.com/simongog/sdsl-lite.git
 fi
 pushd sdsl-lite/ && \
-sudo ./install.sh /usr/ && \
+sudo ./install.sh /usr/local && \
 popd
 
 # biobloomtools
