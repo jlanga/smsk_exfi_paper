@@ -30,15 +30,13 @@ before_install:
   - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
 
 install:
-  - bash src/install/conda_env.sh
-  - source activate exfi_validation
-  - bash src/install/from_src.sh
-  - export PATH="$PWD/bin:$PATH"
+  - bash .travis/travis_install.sh
 
 script:
   - echo $PATH
   - python3 --version
   - bash src/simulate_dna.sh
+  - source activate exfi_validation
   - snakemake -j
 
 after_failure:
