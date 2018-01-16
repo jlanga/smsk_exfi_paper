@@ -35,8 +35,8 @@ install:
 script:
   - echo $PATH
   - python3 --version
-  - bash src/simulate_dna.sh
   - source activate exfi_validation
+  - bash src/simulate_dna.sh
   - snakemake -j
 
 after_failure:
