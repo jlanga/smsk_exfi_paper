@@ -65,6 +65,7 @@ rule exfi_build_splice_graph:
         "build_splice_graph "
             "--input-fasta {input.transcriptome} "
             "--input-bloom {input.bloom_filter} "
+            "--correct "
             "--kmer {params.kmer} "
             "--max-fp-bases {params.max_fp_bases} "
             "--max-overlap {params.max_overlap} "
