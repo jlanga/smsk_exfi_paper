@@ -25,6 +25,7 @@ rule exfi_build_baited_bloom_filter:
         exfi + "build_baited_bloom_filter.log"
     benchmark:
         exfi + "build_baited_bloom_filter.json"
+    conda: "exfi.yml"
     shell:
         "build_baited_bloom_filter "
             "--input-fasta {input.transcriptome} "
@@ -53,14 +54,12 @@ rule exfi_build_splice_graph:
     params:
         kmer = config["exfi"]["kmer"],
         max_fp_bases = config["exfi"]["max_fp_bases"]
-    threads:
-        1
-    log:
-        exfi + "build_splice_graph.log"
-    benchmark:
-        exfi + "build_splice_graph.json"
+    threads: 1
+    log: exfi + "build_splice_graph.log"
+    benchmark: exfi + "build_splice_graph.json"
+    conda: "exfi.yml"
     shell:
-        "build_splicegraph "
+        "build_splice_graph "
             "--input-fasta {input.transcriptome} "
             "--input-bloom {input.bloom_filter} "
             "--kmer {params.kmer} "
@@ -76,13 +75,14 @@ rule exfi_gfa_to_exons:
     output:
         exons = exfi + "exons.fa"
     params:
-        extra = config["exfi"]["gfa_to_exons_extra"]
+        extra = config["exfi"]["gfa1_to_exons_extra"]
     log:
         exfi + "gfa_to_exons.log"
     benchmark:
         exfi + "gfa_to_exons.json"
+    conda: "exfi.yml"
     shell:
-        "gfa_to_exons "
+        "gfa1_to_exons "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.exons} "
             "{params.extra} "
@@ -96,13 +96,14 @@ rule exfi_gfa_to_gapped_transcript:
     output:
         transcripts = exfi + "gapped_transcripts.fa"
     params:
-        extra = config["exfi"]["gfa_to_gapped_transcript_extra"]
+        extra = config["exfi"]["gfa1_to_gapped_transcript_extra"]
     log:
         exfi + "gfa_to_gapped_transcripts.log"
     benchmark:
         exfi + "gfa_to_gapped_transcripts.json"
+    conda: "exfi.yml"
     shell:
-        "gfa_to_gapped_transcripts "
+        "gfa1_to_gapped_transcripts "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.transcripts} "
             "{params.extra} "

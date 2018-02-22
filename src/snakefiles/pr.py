@@ -7,6 +7,8 @@ rule pr_gff3_to_exon_bed:
         pr + "gff3_to_exon_bed.log"
     benchmark:
         pr + "gff3_to_exon_bed.json"
+    conda:
+        "pr.yml"
     shell:
         "(Rscript src/gff3_to_exon_bed.R "
             "{input.gff3_gz} "
@@ -25,6 +27,8 @@ rule pr_exons_to_bed:
         pr + "exons_to_bed.log"
     benchmark:
         pr + "exons_to_bed.json"
+    conda:
+        "pr.yml"
     shell:
         '(grep ^">" {input.fasta} '
         '| tr -d ">" '
@@ -49,6 +53,8 @@ rule pr_true_positives:
         pr + "true_positives.log"
     benchmark:
         pr + "true_positives.json"
+    conda:
+        "pr.yml"
     shell:
         "bedtools intersect "
             "-a {input.pred} "
@@ -72,6 +78,8 @@ rule pr_compute_false_positives:
         pr + "true_positives.log"
     benchmark:
         pr + "true_positives.json"
+    conda:
+        "pr.yml"
     shell:
         "bedtools intersect "
             "-a {input.pred} "
@@ -96,6 +104,8 @@ rule pr_compute_false_negatives:
         pr + "true_positives.log"
     benchmark:
         pr + "true_positives.json"
+    conda:
+        "pr.yml"
     shell:
         "bedtools intersect "
             "-a {input.true} "

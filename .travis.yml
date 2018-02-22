@@ -5,8 +5,8 @@ language: bash
 cache:
   pip: true
   directories:
-    - $HOME/miniconda3_$TRAVIS_OS_NAME # Add the installation to TRAVIS cache.
-    - $HOME/download # Sufficient to add miniconda.sh to TRAVIS cache.
+    - $HOME/miniconda3_$TRAVIS_OS_NAME  # Add the installation to TRAVIS cache.
+    - $HOME/download  # Sufficient to add miniconda.sh to TRAVIS cache.
 
 matrix:
   include:
@@ -24,22 +24,22 @@ matrix:
           - bzip2
           - zlib1g
           - libsparsehash-dev
+          - cmake
 
 before_install:
   - bash .travis/travis_before_install.sh
-  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
 
 install:
-  - bash src/install/conda_env.sh
-  - source activate exfi_validation
-  - bash src/install/from_src.sh
-  - export PATH="$PWD/bin:$PATH"
+  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
+  - bash .travis/travis_install.sh
+  - conda install --yes -c bioconda snakemake
 
 script:
   - echo $PATH
   - python3 --version
+  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
   - bash src/simulate_dna.sh
-  - snakemake -j
+  - snakemake --use-conda -j
 
 after_failure:
   - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;

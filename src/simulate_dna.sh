@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -euxo pipefail
+
+conda install --yes -c bioconda samtools pigz
 
 mkdir -p data/reads/
 
