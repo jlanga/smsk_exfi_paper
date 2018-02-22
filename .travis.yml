@@ -32,6 +32,7 @@ before_install:
 install:
   - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
   - bash .travis/travis_install.sh
+  - conda install --yes snakemake
 
 script:
   - echo $PATH
