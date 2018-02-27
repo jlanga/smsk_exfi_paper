@@ -53,7 +53,9 @@ rule exfi_build_splice_graph:
         gfa = exfi + "splice_graph.gfa"
     params:
         kmer = config["exfi"]["kmer"],
-        max_fp_bases = config["exfi"]["max_fp_bases"]
+        max_fp_bases = config["exfi"]["max_fp_bases"],
+        max_overlap = config["exfi"]["max_overlap"],
+        max_gap_size =  config["exfi"]["max_gap_size"]
     threads: 1
     log: exfi + "build_splice_graph.log"
     benchmark: exfi + "build_splice_graph.json"
@@ -63,6 +65,10 @@ rule exfi_build_splice_graph:
             "--input-fasta {input.transcriptome} "
             "--input-bloom {input.bloom_filter} "
             "--kmer {params.kmer} "
+            "--correct "
+            "--polish "
+            "--max-overlap {params.max_overlap} "
+            "--max-gap-size {params.max_gap_size} "
             "--max-fp-bases {params.max_fp_bases} "
             "--output-gfa {output.gfa} "
         "2> {log}"
