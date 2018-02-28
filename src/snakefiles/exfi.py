@@ -34,6 +34,7 @@ rule exfi_build_baited_bloom_filter:
             "--threads={threads} "
             "--levels={params.levels} "
             "--output-bloom {output.bloom_filter} "
+            "--verbose "
             "{input.fq_gz} "
         "2> {log}"
 
@@ -56,7 +57,7 @@ rule exfi_build_splice_graph:
         max_fp_bases = config["exfi"]["max_fp_bases"],
         max_overlap = config["exfi"]["max_overlap"],
         max_gap_size =  config["exfi"]["max_gap_size"]
-    threads: 1
+    threads: 32
     log: exfi + "build_splice_graph.log"
     benchmark: exfi + "build_splice_graph.json"
     conda: "exfi.yml"
@@ -67,10 +68,12 @@ rule exfi_build_splice_graph:
             "--kmer {params.kmer} "
             "--correct "
             "--polish "
+            "--threads {threads} "
             "--max-overlap {params.max_overlap} "
             "--max-gap-size {params.max_gap_size} "
             "--max-fp-bases {params.max_fp_bases} "
             "--output-gfa {output.gfa} "
+            "--verbose "
         "2> {log}"
 
 
@@ -91,6 +94,7 @@ rule exfi_gfa_to_exons:
         "gfa1_to_exons "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.exons} "
+            "--verbose "
             "{params.extra} "
         "2> {log}"
 
@@ -112,5 +116,6 @@ rule exfi_gfa_to_gapped_transcript:
         "gfa1_to_gapped_transcripts "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.transcripts} "
+            "--verbose "
             "{params.extra} "
         "2> {log}"
