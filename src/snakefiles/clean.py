@@ -1,3 +1,5 @@
 rule clean:
     shell:
-        "rm -r results/"
+        "if [ -d results ]; then "
+            "rm -ri results; "
+        "fi"
