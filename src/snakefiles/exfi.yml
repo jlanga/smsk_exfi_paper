@@ -1,8 +1,7 @@
 channels:
-    - r
-    - defaults
-    - conda-forge
     - bioconda
+    - conda-forge
+    - defaults
 dependencies:
     - abyss=2.0.2=boost1.64_0
     - bedtools=2.26.0=0

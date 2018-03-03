@@ -1,12 +1,11 @@
 channels:
-    - r
-    - defaults
-    - conda-forge
     - bioconda
+    - conda-forge
+    - defaults
 dependencies:
     - r=3.4.2=h65d9972_0
     - r-tidyverse=1.1.1=r342hf9e2102_0
     - bedtools=2.26.0=0
-    - libiconv=1.14=0  # required by r-tidyverse
+#    - libiconv=1.14=0  # required by r-tidyverse
 #    - libncurses  # required by r-tidyverse
 #    - libtinfo  # required by r-tidyverse
