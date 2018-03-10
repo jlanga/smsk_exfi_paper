@@ -9,4 +9,4 @@ dependencies:
     - networkx=2.0=py36h7e96fb8_0
     - biopython=1.69=np113py36_0
     - pip:
-        - "https://github.com/jlanga/exfi/archive/v1.4.9.tar.gz"
+        - "https://github.com/jlanga/exfi/archive/v1.4.11.tar.gz"
