@@ -16,7 +16,7 @@ popd
 # as in https://github.com/bcgsc/biobloom
 pushd biobloom/ && \
 git submodule update --init && \
-git checkout 0a42916922d42611a087d4df871e424a8907896e \
+git checkout 0a42916922d42611a087d4df871e424a8907896e && \
 ./autogen.sh && \
 ./configure --prefix=/usr/local/ && \
 make -j 2 && \
