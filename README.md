@@ -6,9 +6,9 @@
 
 Workflow to:
 
-- Trim genomic reads (trimmomatic)
-- Find putative exons (exfi, abyss-bloom)
+- Find putative exons (exfi, biobloomtools, abyss-bloom, bedtools)
 - Map agaist different exonic, transcriptomic and genomic references (bwa + samtools)
+- Check precision/recall values (bedtools)
 - Make reports
 
 ## 2. First steps
@@ -24,21 +24,15 @@ Follow the contents of the `.travis.yml` file:
 1. Clone this repo and install
 
     ```sh
-    git clone https://github.com/jlanga/exfi_validation.git
+    git clone --recursive https://github.com/jlanga/exfi_validation.git
     cd exfi_validation/
-    bash bin/install/conda_env.sh  # Dowload packages and create an environment
     bash bin/install/from_src.sh
     ```
 
-2. Activate the environment (`source deactivate` to deactivate):
-    ```sh
-    source activate exfi_validation
-    ```
-
-3. Execute the pipeline:
+2. Execute the pipeline:
 
     ```sh
-    snakemake -j
+    snakemake --use-conda -j
     ```
 
 Once you know it works, edit the `config.yaml` with paths to your data
@@ -54,7 +48,11 @@ smsk
 ├── data: raw data, hopefully links to backup data.
 ├── README.md
 ├── results: processed data.
-└── src: additional source code, tarballs, etc.
+|   ├── raw: links to raw data. For your security.
+|   ├── exfi: products from the exfi pipeline: bloom filter, gfa with the splice graph, exons.fa with just the exons
+|   ├── pr: precision/recall values
+|   └── bwa: exons vs reference and some stats.
+└── src: additional source code: snakefiles, env files, submodules to other repos.
 ```
 
 
