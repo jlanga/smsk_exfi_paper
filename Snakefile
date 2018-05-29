@@ -20,6 +20,7 @@ include: snakefiles + "clean.py"
 include: snakefiles + "raw.py"
 include: snakefiles + "exfi.py"
 include: snakefiles + "pr.py"
+include: snakefiles + "bwa.py"
 
 
 
