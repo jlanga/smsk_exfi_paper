@@ -38,7 +38,6 @@ script:
   - echo $PATH
   - python3 --version
   - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
-  - bash src/simulate_dna.sh
   - snakemake --use-conda -j
 
 after_failure:
