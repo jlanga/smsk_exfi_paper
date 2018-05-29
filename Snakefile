@@ -45,3 +45,4 @@ rule all:
         # exfi + "gapped_transcripts.fa",
         ## pr
         pr + "pr.tsv",
+        bwa + "stats.tsv"
