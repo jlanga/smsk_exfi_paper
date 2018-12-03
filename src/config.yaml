@@ -1,3 +1,5 @@
+# Snakemake config file
+---
 samples:
     dna1:
         forward: data/reads/dna1_1.fq.gz

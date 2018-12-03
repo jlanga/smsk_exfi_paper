@@ -1,6 +1,8 @@
+# Conda env for pr computations
+---
 channels:
-    - bioconda
     - conda-forge
+    - bioconda
     - defaults
 dependencies:
     - r=3.4.2=h65d9972_0

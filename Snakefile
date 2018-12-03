@@ -28,21 +28,21 @@ rule all:
     input:
         ## raw
         # expand(
-        #    raw + "{sample}_{end}.fq.gz",
+        #    RAW + "{sample}_{end}.fq.gz",
         #    sample = dna_pe,
         #    end = "1 2".split(" ")
         # ),
-        # raw + "transcriptome.fa.fai",
+        # RAW + "transcriptome.fa.fai",
         ## exfi
         # expand(
-        #    exfi + "k{kmer}_l{levels}_m{size}.bloom",
+        #    EXFI + "k{kmer}_l{levels}_m{size}.bloom",
         #    kmer = config["exfi"]["kmer"],
         #    levels = config["exfi"]["levels"],
         #    size = config["exfi"]["size"]
         # ),
-        # exfi + "splice_graph.gfa",
-        # exfi + "exons.fa",
-        # exfi + "gapped_transcripts.fa",
+        # EXFI + "splice_graph.gfa",
+        # EXFI + "exons.fa",
+        # EXFI + "gapped_transcripts.fa",
         ## pr
-        pr + "pr.tsv",
-        bwa + "stats.tsv"
+        PR + "pr.tsv",
+        BWA + "stats.tsv"

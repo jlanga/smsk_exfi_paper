@@ -1,3 +1,5 @@
+# Travis config file
+---
 dist: trusty
 
 language: bash
