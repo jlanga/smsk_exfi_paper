@@ -48,7 +48,7 @@ rule pr_true_positives:
     output:
         bed = PR + "true_positives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
         PR + "true_positives.log"
     benchmark:
@@ -73,7 +73,7 @@ rule pr_compute_false_positives:
     output:
         bed = PR + "false_positives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
         PR + "true_positives.log"
     benchmark:
@@ -99,7 +99,7 @@ rule pr_compute_false_negatives:
     output:
         bed = PR + "false_negatives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
         PR + "true_positives.log"
     benchmark:

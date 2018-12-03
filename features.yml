@@ -1,0 +1,12 @@
+reference:
+    exome:
+        data/reference/exome.fa
+    transcriptome:
+        data/reference/transcriptome.fa
+    genome:
+        data/reference/genome.fa
+    annotation:
+        data/reference/annotation.gff3
+
+assembly:
+    data/reference/transcriptome.fa

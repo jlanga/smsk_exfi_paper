@@ -1,10 +1,21 @@
+def get_reads(wildcards):
+    sample = wildcards.sample
+    forward, reverse = (
+        samples
+        [(samples["sample"] == sample)]
+        [["forward", "reverse"]]
+        .values
+        .tolist()[0]
+    )
+    return forward, reverse
+
+
 rule raw_link_pe_sample:
     input:
-        forward= lambda wildcards: config["samples"][wildcards.sample]["forward"],
-        reverse= lambda wildcards: config["samples"][wildcards.sample]["reverse"]
+        get_reads
     output:
-        forward= RAW + "{sample}_1.fq.gz",
-        reverse= RAW + "{sample}_2.fq.gz"
+        forward = RAW + "{sample}_1.fq.gz",
+        reverse = RAW + "{sample}_2.fq.gz"
     log:
         RAW + "link_dna_pe_{sample}.log"
     benchmark:
@@ -12,20 +23,20 @@ rule raw_link_pe_sample:
     shell:
         "ln "
             "--symbolic "
-            "$(readlink --canonicalize {input.forward}) "
+            "$(readlink --canonicalize {input[0]}) "
             "{output.forward} 2> {log}; "
         "ln "
             "--symbolic "
-            "$(readlink --canonicalize {input.reverse}) "
+            "$(readlink --canonicalize {input[0]}) "
             "{output.reverse} 2>> {log}"
 
 
 
 rule raw_link_assembly:
     input:
-        fasta= config["assembly"]
+        fasta = features["assembly"]
     output:
-        fasta= RAW + "assembly.fa"
+        fasta = RAW + "assembly.fa"
     log:
         RAW + "link_assembly.log"
     benchmark:
@@ -69,7 +80,7 @@ rule raw_link_assembly:
 
 rule raw_link_transcriptome:
     input:
-        fasta= config["reference"]["transcriptome"]
+        fasta= features["reference"]["transcriptome"]
     output:
         fasta= RAW + "transcriptome.fa"
     log:
@@ -86,7 +97,7 @@ rule raw_link_transcriptome:
 
 rule raw_link_genome:
     input:
-        fasta= config["reference"]["genome"]
+        fasta= features["reference"]["genome"]
     output:
         fasta= RAW + "genome.fa"
     log:
@@ -102,7 +113,7 @@ rule raw_link_genome:
 
 rule raw_link_annotation:
     input:
-        gff3_gz = config["reference"]["annotation"]
+        gff3_gz = features["reference"]["annotation"]
     output:
         gff3_gz = RAW + "annotation.gff3.gz"
     log:

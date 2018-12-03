@@ -3,22 +3,22 @@ rule exfi_build_baited_bloom_filter:
         transcriptome = RAW + "assembly.fa",
         fq_gz = expand(
             RAW + "{sample}_{end}.fq.gz",
-            sample = dna_pe,
+            sample = SAMPLES,
             end = "1 2".split()
         )
     output:
         bloom_filter = protected(
             expand(
                 EXFI + "k{kmer}_l{levels}_m{size}.bloom",
-                kmer   = config["exfi"]["kmer"],
-                levels = config["exfi"]["levels"],
-                size   = config["exfi"]["size"]
+                kmer   = params["exfi"]["kmer"],
+                levels = params["exfi"]["levels"],
+                size   = params["exfi"]["size"]
             )
         )
     params:
-        kmer   = config["exfi"]["kmer"],
-        levels = config["exfi"]["levels"],
-        size   = config["exfi"]["size"]
+        kmer   = params["exfi"]["kmer"],
+        levels = params["exfi"]["levels"],
+        size   = params["exfi"]["size"]
     threads:
         32
     log:
@@ -46,17 +46,17 @@ rule exfi_build_splice_graph:
         fai = RAW + "assembly.fa.fai",
         bloom_filter = expand(
             EXFI + "k{kmer}_l{levels}_m{size}.bloom",
-            kmer   = config["exfi"]["kmer"],
-            levels = config["exfi"]["levels"],
-            size   = config["exfi"]["size"]
+            kmer   = params["exfi"]["kmer"],
+            levels = params["exfi"]["levels"],
+            size   = params["exfi"]["size"]
         )
     output:
         gfa = EXFI + "splice_graph.gfa"
     params:
-        kmer = config["exfi"]["kmer"],
-        max_fp_bases = config["exfi"]["max_fp_bases"],
-        max_overlap = config["exfi"]["max_overlap"],
-        max_gap_size =  config["exfi"]["max_gap_size"]
+        kmer = params["exfi"]["kmer"],
+        max_fp_bases = params["exfi"]["max_fp_bases"],
+        max_overlap = params["exfi"]["max_overlap"],
+        max_gap_size =  params["exfi"]["max_gap_size"]
     threads: 32
     log: EXFI + "build_splice_graph.log"
     benchmark: EXFI + "build_splice_graph.json"
@@ -84,7 +84,7 @@ rule exfi_gfa_to_exons:
     output:
         exons = EXFI + "exons.fa"
     params:
-        extra = config["exfi"]["gfa1_to_exons_extra"]
+        extra = params["exfi"]["gfa1_to_exons_extra"]
     log:
         EXFI + "gfa_to_exons.log"
     benchmark:
@@ -106,7 +106,7 @@ rule exfi_gfa_to_gapped_transcript:
     output:
         transcripts = EXFI + "gapped_transcripts.fa"
     params:
-        extra = config["exfi"]["gfa1_to_gapped_transcript_extra"]
+        extra = params["exfi"]["gfa1_to_gapped_transcript_extra"]
     log:
         EXFI + "gfa_to_gapped_transcripts.log"
     benchmark:
