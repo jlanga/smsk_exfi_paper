@@ -4,43 +4,83 @@ dist: trusty
 
 language: bash
 
+addons:
+    apt_packages:
+        - build-essential
+        - git
+        - curl
+        - libboost-dev
+        - gcc
+        - autoconf
+        - bzip2
+        - zlib1g
+        - libsparsehash-dev
+        - cmake
+
 cache:
-  pip: true
-  directories:
-    - $HOME/miniconda3_$TRAVIS_OS_NAME  # Add the installation to TRAVIS cache.
-    - $HOME/download  # Sufficient to add miniconda.sh to TRAVIS cache.
+    pip: true
+    timeout: 1000
+    directories:
+        - "$HOME/miniconda3_$TRAVIS_OS_NAME"
+        - "$TRAVIS_BUILD_DIR/.snakemake/conda"  # snakemake envs
 
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      addons:
-        apt_packages:
-          - build-essential
-          - git
-          - curl
-          - libboost-dev
-          - gcc
-          - autoconf
-          - bzip2
-          - zlib1g
-          - libsparsehash-dev
-          - cmake
+before_install: |
+    url="https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    if [[ -d "$HOME"/miniconda3_"$TRAVIS_OS_NAME"/bin ]]; then
+        echo "miniconda already installed."
+    else
+        echo "Installing miniconda."
+        mkdir -p "$HOME"/download
+        wget \
+            --continue \
+            --output-document "$HOME"/download/miniconda_"$TRAVIS_OS_NAME".sh \
+            $url
+        chmod +x "$HOME"/download/miniconda_"$TRAVIS_OS_NAME".sh
+        "$HOME"/download/miniconda_"$TRAVIS_OS_NAME".sh \
+            -u \
+            -b \
+            -p "$HOME"/miniconda3_"$TRAVIS_OS_NAME"
+        "$HOME"/miniconda3_"$TRAVIS_OS_NAME"/bin/conda clean --all --yes
+        echo "local_repodata_ttl: 1800" >> ~/.condarc
+    fi
 
-before_install:
-  - bash .travis/travis_before_install.sh
+install: |
+    export PATH="$HOME"/miniconda3_"$TRAVIS_OS_NAME"/bin:"$PATH"
+    echo "$PATH"
+    conda config --add channels defaults
+    conda config --add channels bioconda
+    conda config --add channels conda-forge
+    conda install --quiet --yes --channel bioconda snakemake=5.3.0
+    snakemake --use-conda --create-envs-only
+    conda clean --all --yes
+    mkdir -p src/
+    mkdir -p bin/
+    pushd src/ || exit
+    pushd sdsl-lite/ && \
+    sudo ./install.sh /usr/local/ && \
+    popd || exit
+    pushd biobloom/ || exit
+    git submodule update --init
+    git checkout 0a42916922d42611a087d4df871e424a8907896e
+    ./autogen.sh
+    ./configure --prefix=/usr/local/
+    make -j 2
+    sudo make install
+    popd || exit
+    popd || exit
 
-install:
-  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
-  - bash .travis/travis_install.sh
-  - conda install --yes -c bioconda snakemake
 
-script:
-  - echo $PATH
-  - python3 --version
-  - export PATH="$HOME/miniconda3_$TRAVIS_OS_NAME/bin:$PATH"
-  - snakemake --use-conda -j
+script: |
+    echo $PATH
+    python --version
+    export PATH="$HOME"/miniconda3_"$TRAVIS_OS_NAME"/bin:"$PATH"
+    snakemake --use-conda --jobs 2
+    # snakemake --cleanup-conda
+
+before_cache: |
+    CONDA_PATH="$HOME"/miniconda3_"$TRAVIS_OS_NAME"
+    conda clean --all --yes
+    rm -rf "$CONDA_PATH"/{locks,pkgs,var,conda-meta/history}
 
 after_failure:
   - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;
