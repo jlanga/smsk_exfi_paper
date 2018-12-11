@@ -4,6 +4,3 @@
 [submodule "src/biobloom"]
 	path = src/biobloom
 	url = https://github.com/bcgsc/biobloom
-[submodule "src/snakehooks"]
-	path = src/snakehooks
-	url = https://github.com/jlanga/snakehooks
