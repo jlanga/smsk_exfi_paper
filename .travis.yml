@@ -83,4 +83,4 @@ before_cache: |
     rm -rf "$CONDA_PATH"/{locks,pkgs,var,conda-meta/history}
 
 after_failure:
-  - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;
+    - find results -name "*.log" -exec tail -vn +0 {} \; -exec echo -e "" \;

@@ -1,3 +1,5 @@
+# Features file for Snakemake
+---
 reference:
     exome:
         data/reference/exome.fa

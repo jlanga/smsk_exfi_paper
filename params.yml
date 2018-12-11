@@ -1,3 +1,5 @@
+# Params file for snakemake
+---
 exfi:
     kmer: "27"
     levels: "1"
