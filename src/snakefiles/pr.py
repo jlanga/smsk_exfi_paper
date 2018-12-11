@@ -1,12 +1,12 @@
 rule pr_gff3_to_exon_bed:
     input:
-        gff3_gz = raw + "annotation.gff3.gz"
+        gff3_gz = RAW + "annotation.gff3.gz"
     output:
-        bed = pr + "true_exons.bed"
+        bed = PR + "true_exons.bed"
     log:
-        pr + "gff3_to_exon_bed.log"
+        PR + "gff3_to_exon_bed.log"
     benchmark:
-        pr + "gff3_to_exon_bed.json"
+        PR + "gff3_to_exon_bed.json"
     conda:
         "pr.yml"
     shell:
@@ -20,13 +20,13 @@ rule pr_gff3_to_exon_bed:
 
 rule pr_exons_to_bed:
     input:
-        fasta = exfi + "exons.fa"
+        fasta = EXFI + "exons.fa"
     output:
-        bed = pr + "pred_exons.bed"
+        bed = PR + "pred_exons.bed"
     log:
-        pr + "exons_to_bed.log"
+        PR + "exons_to_bed.log"
     benchmark:
-        pr + "exons_to_bed.json"
+        PR + "exons_to_bed.json"
     conda:
         "pr.yml"
     shell:
@@ -43,16 +43,16 @@ rule pr_exons_to_bed:
 rule pr_true_positives:
     """Predicted exons in true"""
     input:
-        true= pr + "true_exons.bed",
-        pred= pr + "pred_exons.bed"
+        true= PR + "true_exons.bed",
+        pred= PR + "pred_exons.bed"
     output:
-        bed = pr + "true_positives.bed"
+        bed = PR + "true_positives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
-        pr + "true_positives.log"
+        PR + "true_positives.log"
     benchmark:
-        pr + "true_positives.json"
+        PR + "true_positives.json"
     conda:
         "pr.yml"
     shell:
@@ -68,16 +68,16 @@ rule pr_true_positives:
 rule pr_compute_false_positives:
     """Predicted exons not in true"""
     input:
-        true= pr + "true_exons.bed",
-        pred= pr + "pred_exons.bed"
+        true= PR + "true_exons.bed",
+        pred= PR + "pred_exons.bed"
     output:
-        bed = pr + "false_positives.bed"
+        bed = PR + "false_positives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
-        pr + "true_positives.log"
+        PR + "true_positives.log"
     benchmark:
-        pr + "true_positives.json"
+        PR + "true_positives.json"
     conda:
         "pr.yml"
     shell:
@@ -94,16 +94,16 @@ rule pr_compute_false_positives:
 rule pr_compute_false_negatives:
     """True exons not in predicted"""
     input:
-        true= pr + "true_exons.bed",
-        pred= pr + "pred_exons.bed"
+        true= PR + "true_exons.bed",
+        pred= PR + "pred_exons.bed"
     output:
-        bed = pr + "false_negatives.bed"
+        bed = PR + "false_negatives.bed"
     params:
-        fraction_overlap = config["pr"]["fraction_overlap"]
+        fraction_overlap = params["pr"]["fraction_overlap"]
     log:
-        pr + "true_positives.log"
+        PR + "true_positives.log"
     benchmark:
-        pr + "true_positives.json"
+        PR + "true_positives.json"
     conda:
         "pr.yml"
     shell:
@@ -118,15 +118,15 @@ rule pr_compute_false_negatives:
 
 rule pr_precision_recall:
     input:
-        tp = pr + "true_positives.bed",
-        fp = pr + "false_positives.bed",
-        fn = pr + "false_negatives.bed"
+        tp = PR + "true_positives.bed",
+        fp = PR + "false_positives.bed",
+        fn = PR + "false_negatives.bed"
     output:
-        tsv = pr + "pr.tsv"
+        tsv = PR + "pr.tsv"
     log:
-        pr + "pr.log"
+        PR + "pr.log"
     benchmark:
-        pr + "precision_recall.json"
+        PR + "precision_recall.json"
     shell:
         '(tp=$(wc -l < {input.tp}); '
         'fp=$(wc -l < {input.fp}); '

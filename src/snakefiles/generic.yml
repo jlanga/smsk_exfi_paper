@@ -1,6 +1,8 @@
+# Conda env for generic rules
+---
 channels:
-    - bioconda
     - conda-forge
+    - bioconda
     - defaults
 dependencies:
     - samtools=1.7

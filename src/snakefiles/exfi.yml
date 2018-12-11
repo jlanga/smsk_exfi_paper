@@ -1,6 +1,8 @@
+# Conda env for exfi
+---
 channels:
-    - bioconda
     - conda-forge
+    - bioconda
     - defaults
 dependencies:
     - abyss=2.0.1=boost1.60_2
@@ -8,5 +10,6 @@ dependencies:
     - natsort=5.0.2=py36_0
     - networkx=2.0=py36h7e96fb8_0
     - biopython=1.69=np113py36_0
+    - pip
     - pip:
-        - "https://github.com/jlanga/exfi/archive/v1.4.12.tar.gz"
+          - "https://github.com/jlanga/exfi/archive/v1.4.12.tar.gz"

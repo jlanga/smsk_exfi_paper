@@ -1,35 +1,46 @@
+def get_reads(wildcards):
+    sample = wildcards.sample
+    forward, reverse = (
+        samples
+        [(samples["sample"] == sample)]
+        [["forward", "reverse"]]
+        .values
+        .tolist()[0]
+    )
+    return forward, reverse
+
+
 rule raw_link_pe_sample:
     input:
-        forward= lambda wildcards: config["samples"][wildcards.sample]["forward"],
-        reverse= lambda wildcards: config["samples"][wildcards.sample]["reverse"]
+        get_reads
     output:
-        forward= raw + "{sample}_1.fq.gz",
-        reverse= raw + "{sample}_2.fq.gz"
+        forward = RAW + "{sample}_1.fq.gz",
+        reverse = RAW + "{sample}_2.fq.gz"
     log:
-        raw + "link_dna_pe_{sample}.log"
+        RAW + "link_dna_pe_{sample}.log"
     benchmark:
-        raw + "link_dna_pe_{sample}.json"
+        RAW + "link_dna_pe_{sample}.json"
     shell:
         "ln "
             "--symbolic "
-            "$(readlink --canonicalize {input.forward}) "
+            "$(readlink --canonicalize {input[0]}) "
             "{output.forward} 2> {log}; "
         "ln "
             "--symbolic "
-            "$(readlink --canonicalize {input.reverse}) "
+            "$(readlink --canonicalize {input[0]}) "
             "{output.reverse} 2>> {log}"
 
 
 
 rule raw_link_assembly:
     input:
-        fasta= config["assembly"]
+        fasta = features["assembly"]
     output:
-        fasta= raw + "assembly.fa"
+        fasta = RAW + "assembly.fa"
     log:
-        raw + "link_assembly.log"
+        RAW + "link_assembly.log"
     benchmark:
-        raw + "link_assembly.json"
+        RAW + "link_assembly.json"
     shell:
         "ln "
             "--symbolic "
@@ -42,11 +53,11 @@ rule raw_link_assembly:
 #     input:
 #         fasta= config["reference"]["exome"]
 #     output:
-#         fasta= raw + "exome.fa"
+#         fasta= RAW + "exome.fa"
 #     log:
-#         raw + "link_exome.log"
+#         RAW + "link_exome.log"
 #     benchmark:
-#         raw + "link_exome.json"
+#         RAW + "link_exome.json"
 #     shell:
 #         "ln "
 #             "--symbolic "
@@ -57,9 +68,9 @@ rule raw_link_assembly:
 
 # rule raw_reduce_exome:
 #     input:
-#         fasta = raw + "exome.fa"
+#         fasta = RAW + "exome.fa"
 #     output:
-#         fasta = raw + "exome_reduced.fa"
+#         fasta = RAW + "exome_reduced.fa"
 #     shell:
 #         "reduce_exons "
 #             "--input-fasta {input.fasta} "
@@ -69,13 +80,13 @@ rule raw_link_assembly:
 
 rule raw_link_transcriptome:
     input:
-        fasta= config["reference"]["transcriptome"]
+        fasta= features["reference"]["transcriptome"]
     output:
-        fasta= raw + "transcriptome.fa"
+        fasta= RAW + "transcriptome.fa"
     log:
-        raw + "link_transcriptome.log"
+        RAW + "link_transcriptome.log"
     benchmark:
-        raw + "link_transcriptome.json"
+        RAW + "link_transcriptome.json"
     shell:
         "ln "
             "--symbolic "
@@ -86,13 +97,13 @@ rule raw_link_transcriptome:
 
 rule raw_link_genome:
     input:
-        fasta= config["reference"]["genome"]
+        fasta= features["reference"]["genome"]
     output:
-        fasta= raw + "genome.fa"
+        fasta= RAW + "genome.fa"
     log:
-        raw + "link_genome.log"
+        RAW + "link_genome.log"
     benchmark:
-        raw + "link_genome.json"
+        RAW + "link_genome.json"
     shell:
         "ln "
             "--symbolic "
@@ -102,13 +113,13 @@ rule raw_link_genome:
 
 rule raw_link_annotation:
     input:
-        gff3_gz = config["reference"]["annotation"]
+        gff3_gz = features["reference"]["annotation"]
     output:
-        gff3_gz = raw + "annotation.gff3.gz"
+        gff3_gz = RAW + "annotation.gff3.gz"
     log:
-        raw + "link_annotation.log"
+        RAW + "link_annotation.log"
     benchmark:
-        raw + "link_annotation.json"
+        RAW + "link_annotation.json"
     shell:
         "ln "
             "--symbolic "

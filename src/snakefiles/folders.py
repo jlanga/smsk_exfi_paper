@@ -1,5 +1,10 @@
-raw =   "results/raw/"
-exfi = "results/exfi/"
-bwa = "results/bwa/"
-dist = "results/dist/"
-pr = "results/pr/"
+"""folders.py
+
+Submudule to store folder variables
+"""
+
+RAW = "results/raw/"
+EXFI = "results/exfi/"
+BWA = "results/bwa/"
+DIST = "results/dist/"
+PR = "results/pr/"

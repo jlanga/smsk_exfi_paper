@@ -1,30 +1,30 @@
 rule exfi_build_baited_bloom_filter:
     input:
-        transcriptome = raw + "assembly.fa",
+        transcriptome = RAW + "assembly.fa",
         fq_gz = expand(
-            raw + "{sample}_{end}.fq.gz",
-            sample = dna_pe,
+            RAW + "{sample}_{end}.fq.gz",
+            sample = SAMPLES,
             end = "1 2".split()
         )
     output:
         bloom_filter = protected(
             expand(
-                exfi + "k{kmer}_l{levels}_m{size}.bloom",
-                kmer   = config["exfi"]["kmer"],
-                levels = config["exfi"]["levels"],
-                size   = config["exfi"]["size"]
+                EXFI + "k{kmer}_l{levels}_m{size}.bloom",
+                kmer   = params["exfi"]["kmer"],
+                levels = params["exfi"]["levels"],
+                size   = params["exfi"]["size"]
             )
         )
     params:
-        kmer   = config["exfi"]["kmer"],
-        levels = config["exfi"]["levels"],
-        size   = config["exfi"]["size"]
+        kmer   = params["exfi"]["kmer"],
+        levels = params["exfi"]["levels"],
+        size   = params["exfi"]["size"]
     threads:
         32
     log:
-        exfi + "build_baited_bloom_filter.log"
+        EXFI + "build_baited_bloom_filter.log"
     benchmark:
-        exfi + "build_baited_bloom_filter.json"
+        EXFI + "build_baited_bloom_filter.json"
     conda: "exfi.yml"
     shell:
         "build_baited_bloom_filter "
@@ -42,24 +42,24 @@ rule exfi_build_baited_bloom_filter:
 
 rule exfi_build_splice_graph:
     input:
-        transcriptome = raw + "assembly.fa",
-        fai = raw + "assembly.fa.fai",
+        transcriptome = RAW + "assembly.fa",
+        fai = RAW + "assembly.fa.fai",
         bloom_filter = expand(
-            exfi + "k{kmer}_l{levels}_m{size}.bloom",
-            kmer   = config["exfi"]["kmer"],
-            levels = config["exfi"]["levels"],
-            size   = config["exfi"]["size"]
+            EXFI + "k{kmer}_l{levels}_m{size}.bloom",
+            kmer   = params["exfi"]["kmer"],
+            levels = params["exfi"]["levels"],
+            size   = params["exfi"]["size"]
         )
     output:
-        gfa = exfi + "splice_graph.gfa"
+        gfa = EXFI + "splice_graph.gfa"
     params:
-        kmer = config["exfi"]["kmer"],
-        max_fp_bases = config["exfi"]["max_fp_bases"],
-        max_overlap = config["exfi"]["max_overlap"],
-        max_gap_size =  config["exfi"]["max_gap_size"]
+        kmer = params["exfi"]["kmer"],
+        max_fp_bases = params["exfi"]["max_fp_bases"],
+        max_overlap = params["exfi"]["max_overlap"],
+        max_gap_size =  params["exfi"]["max_gap_size"]
     threads: 32
-    log: exfi + "build_splice_graph.log"
-    benchmark: exfi + "build_splice_graph.json"
+    log: EXFI + "build_splice_graph.log"
+    benchmark: EXFI + "build_splice_graph.json"
     conda: "exfi.yml"
     shell:
         "build_splice_graph "
@@ -80,15 +80,15 @@ rule exfi_build_splice_graph:
 
 rule exfi_gfa_to_exons:
     input:
-        gfa = exfi + "splice_graph.gfa"
+        gfa = EXFI + "splice_graph.gfa"
     output:
-        exons = exfi + "exons.fa"
+        exons = EXFI + "exons.fa"
     params:
-        extra = config["exfi"]["gfa1_to_exons_extra"]
+        extra = params["exfi"]["gfa1_to_exons_extra"]
     log:
-        exfi + "gfa_to_exons.log"
+        EXFI + "gfa_to_exons.log"
     benchmark:
-        exfi + "gfa_to_exons.json"
+        EXFI + "gfa_to_exons.json"
     conda: "exfi.yml"
     shell:
         "gfa1_to_exons "
@@ -102,15 +102,15 @@ rule exfi_gfa_to_exons:
 
 rule exfi_gfa_to_gapped_transcript:
     input:
-        gfa = exfi + "splice_graph.gfa"
+        gfa = EXFI + "splice_graph.gfa"
     output:
-        transcripts = exfi + "gapped_transcripts.fa"
+        transcripts = EXFI + "gapped_transcripts.fa"
     params:
-        extra = config["exfi"]["gfa1_to_gapped_transcript_extra"]
+        extra = params["exfi"]["gfa1_to_gapped_transcript_extra"]
     log:
-        exfi + "gfa_to_gapped_transcripts.log"
+        EXFI + "gfa_to_gapped_transcripts.log"
     benchmark:
-        exfi + "gfa_to_gapped_transcripts.json"
+        EXFI + "gfa_to_gapped_transcripts.json"
     conda: "exfi.yml"
     shell:
         "gfa1_to_gapped_transcripts "

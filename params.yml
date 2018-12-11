@@ -1,0 +1,14 @@
+# Params file for snakemake
+---
+exfi:
+    kmer: "27"
+    levels: "1"
+    size: "500M"
+    max_fp_bases: "5"
+    max_overlap: "10"
+    max_gap_size: "10"
+    gfa1_to_exons_extra: "--soft-mask-overlaps"
+    gfa1_to_gapped_transcript_extra: "--soft-mask-overlaps"
+
+pr:
+    fraction_overlap: 0.9

@@ -1,16 +1,21 @@
+# pylint: disable=syntax-error
+
+import pandas as pd
+import yaml
+
+from snakemake.utils import min_version
+min_version("5.3")
+
 shell.prefix("set -euo pipefail;")
-configfile: "src/config.yaml"
 
+params = yaml.load(open("params.yml", "r"))
+features = yaml.load(open("features.yml", "r"))
+samples = pd.read_table("samples.tsv")
 
+singularity: "docker://continuumio/miniconda3:4.4.10"
 
 # Some variables
-dna_pe = [
-    sample_name for sample_name in config["samples"]
-        if config["samples"][sample_name]["type"] == "PE" and
-        config["samples"][sample_name]["molecule"] == "dna"
-]
-THREAD_LIMIT = 64
-
+SAMPLES =  samples["sample"].values.tolist()
 
 # Read subsnakefiles
 snakefiles = "src/snakefiles/"
@@ -24,25 +29,26 @@ include: snakefiles + "bwa.py"
 
 
 
+
 rule all:
     input:
         ## raw
         # expand(
-        #    raw + "{sample}_{end}.fq.gz",
+        #    RAW + "{sample}_{end}.fq.gz",
         #    sample = dna_pe,
         #    end = "1 2".split(" ")
         # ),
-        # raw + "transcriptome.fa.fai",
+        # RAW + "transcriptome.fa.fai",
         ## exfi
         # expand(
-        #    exfi + "k{kmer}_l{levels}_m{size}.bloom",
+        #    EXFI + "k{kmer}_l{levels}_m{size}.bloom",
         #    kmer = config["exfi"]["kmer"],
         #    levels = config["exfi"]["levels"],
         #    size = config["exfi"]["size"]
         # ),
-        # exfi + "splice_graph.gfa",
-        # exfi + "exons.fa",
-        # exfi + "gapped_transcripts.fa",
+        # EXFI + "splice_graph.gfa",
+        # EXFI + "exons.fa",
+        # EXFI + "gapped_transcripts.fa",
         ## pr
-        pr + "pr.tsv",
-        bwa + "stats.tsv"
+        PR + "pr.tsv",
+        BWA + "stats.tsv"

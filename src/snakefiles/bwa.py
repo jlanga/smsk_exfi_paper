@@ -1,18 +1,18 @@
 rule bwa_index:
     input:
-        reference = raw + "genome.fa"
+        reference = RAW + "genome.fa"
     output:
         expand(
-            bwa + "genome.{suffix}",
+            BWA + "genome.{suffix}",
             suffix = "amb ann bwt pac sa".split()
         ),
-        mock = touch(bwa + "genome")
+        mock = touch(BWA + "genome")
     log:
-        bwa + "index.log"
+        BWA + "index.log"
     benchmark:
-        bwa + "index.bmk"
+        BWA + "index.bmk"
     params:
-        prefix = bwa + "genome"
+        prefix = BWA + "genome"
     conda: "bwa.yml"
     shell:
         "bwa index "
@@ -24,14 +24,14 @@ rule bwa_index:
 
 rule bwa_map:
     input:
-        exons = exfi + "exons.fa",
-        index = bwa + "genome"
+        exons = EXFI + "exons.fa",
+        index = BWA + "genome"
     output:
-        bam = bwa + "exons.bam"
+        bam = BWA + "exons.bam"
     log:
-        bwa + "map.log"
+        BWA + "map.log"
     benchmark:
-        bwa + "index.bmk"
+        BWA + "index.bmk"
     conda: "bwa.yml"
     shell:
         "(bwa mem "
@@ -50,10 +50,10 @@ rule bwa_map:
 
 
 rule bwa_stats:
-    input: bam = bwa + "exons.bam"
-    output: tsv = bwa + "stats.tsv"
-    log: bwa + "stats.log"
-    benchmark: bwa + "stats.bmk"
+    input: bam = BWA + "exons.bam"
+    output: tsv = BWA + "stats.tsv"
+    log: BWA + "stats.log"
+    benchmark: BWA + "stats.bmk"
     conda: "bwa.yml"
     shell:
         """
