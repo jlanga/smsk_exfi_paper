@@ -55,11 +55,10 @@ install: |
     conda clean --all --yes
     mkdir -p src/
     mkdir -p bin/
-    pushd src/ || exit
-    pushd sdsl-lite/ && \
-    sudo ./install.sh /usr/local/ && \
+    pushd src/sdsl-lite || exit
+    sudo ./install.sh /usr/local/
     popd || exit
-    pushd biobloom/ || exit
+    pushd src/biobloom/ || exit
     git submodule update --init
     git checkout 0a42916922d42611a087d4df871e424a8907896e
     ./autogen.sh
@@ -67,6 +66,11 @@ install: |
     make -j 2
     sudo make install
     popd || exit
+    pusdh src/ChopStitch || exit
+    bash autogen.sh
+    ./configure
+    make -j
+    cp CreateBloom FindExons MakeSplicegraph.py FindSubcomponents.py ../../bin/
     popd || exit
 
 
