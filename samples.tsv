@@ -1,3 +1,12 @@
-sample	forward	reverse	molecule	type	phred	adaptor
-dna1	data/reads/dna1_1.fq.gz	data/reads/dna1_2.fq.gz	dna	PE	phred33	data/adaptors/TruSeq3-PE-2.fa
-dna2	data/reads/dna2_1.fq.gz	data/reads/dna2_2.fq.gz	dna	PE	phred33	data/adaptors/TruSeq3-PE-2.fa
+sample	library	forward	reverse
+drer	1	data/reads/drer.1_1.fq.gz	data/reads/drer.1_2.fq.gz
+drer	2	data/reads/drer.2_1.fq.gz	data/reads/drer.2_2.fq.gz
+hsap	1	data/reads/hsap.1_1.fq.gz	data/reads/hsap.1_2.fq.gz
+hsap	2	data/reads/hsap.2_1.fq.gz	data/reads/hsap.2_2.fq.gz
+hsap	3	data/reads/hsap.3_1.fq.gz	data/reads/hsap.3_2.fq.gz
+hsap	4	data/reads/hsap.4_1.fq.gz	data/reads/hsap.4_2.fq.gz
+hsap	5	data/reads/hsap.5_1.fq.gz	data/reads/hsap.5_2.fq.gz
+hsap	6	data/reads/hsap.6_1.fq.gz	data/reads/hsap.6_2.fq.gz
+char	1	data/reads/char.1_1.fq.gz	data/reads/char.1_2.fq.gz
+char	2	data/reads/char.2_1.fq.gz	data/reads/char.2_2.fq.gz
+char	3	data/reads/char.3_1.fq.gz	data/reads/char.3_2.fq.gz

@@ -5,11 +5,12 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - abyss=2.0.1=boost1.60_2
-    - bedtools=2.26.0=0
+    - abyss=2.0.2=h51208dd_5
+    - bedtools=2.27.1
     - natsort=5.0.2=py36_0
     - networkx=2.0=py36h7e96fb8_0
     - biopython=1.69=np113py36_0
+    - seqtk=1.3
     - pip
     - pip:
           - "https://github.com/jlanga/exfi/archive/v1.4.12.tar.gz"

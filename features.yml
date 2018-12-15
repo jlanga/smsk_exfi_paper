@@ -1,14 +1,25 @@
 # Features file for Snakemake
 ---
-reference:
-    exome:
-        data/reference/exome.fa
-    transcriptome:
-        data/reference/transcriptome.fa
+hsap:
     genome:
-        data/reference/genome.fa
+        data/reference/Homo_sapiens.GRCh38.dna.big_chrs.fa
+    transcriptome:
+        data/reference/hsap.cdna.big_chrs.fa
     annotation:
-        data/reference/annotation.gff3
+        data/reference/Homo_sapiens.GRCh38.91.big_chrs.gff3
 
-assembly:
-    data/reference/transcriptome.fa
+drer:
+    genome:
+        data/reference/Danio_rerio.GRCz10.dna.big_chrs.fa
+    transcriptome:
+        data/reference/drer.cdna.big_chrs.fa
+    annotation:
+        data/reference/Danio_rerio.GRCz10.91.big_chrs.gff3
+
+char:
+    genome:
+        data/reference/Clupea_harengus.ASM96633v1.dna.toplevel.fa
+    transcriptome:
+        data/reference/char.clupea_harengus.khmer_trinity.fasta
+    annotation:
+        data/reference/Clupea_harengus.ASM96633v1.gff

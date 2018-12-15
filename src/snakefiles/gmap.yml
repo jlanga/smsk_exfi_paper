@@ -1,0 +1,8 @@
+# Conda env for GMAP related rules
+---
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - gmap=2018.07.04=pl526he4cf2ce_0

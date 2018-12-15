@@ -1,139 +1,130 @@
-rule pr_gff3_to_exon_bed:
+rule pr_gff3_to_exon_bed3:
     input:
-        gff3_gz = RAW + "annotation.gff3.gz"
+        RAW + "{sample}.gff3"
     output:
-        bed = PR + "true_exons.bed"
+        PR + "{sample}.true.bed"
     log:
-        PR + "gff3_to_exon_bed.log"
+        PR + "{sample}.true.log"
     benchmark:
-        PR + "gff3_to_exon_bed.json"
+        PR + "{sample}.true.bmk"
     conda:
         "pr.yml"
     shell:
-        "(Rscript src/gff3_to_exon_bed.R "
-            "{input.gff3_gz} "
-        "| sort -k1,1 -k2,2n "
-        "> {output.bed}) "
-        "2> {log}"
+        """
+        (Rscript src/gff3_to_exon_bed3.R \
+            {input} \
+        | sort -k 1,1 -k2,2n \
+        > {output}) \
+        2> {log}
+        """
 
 
 
-rule pr_exons_to_bed:
+rule pr_exfi_exons_to_bed3:
     input:
-        fasta = EXFI + "exons.fa"
+        EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.fa"
     output:
-        bed = PR + "pred_exons.bed"
+        PR + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bed"
     log:
-        PR + "exons_to_bed.log"
+        PR + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.log"
     benchmark:
-        PR + "exons_to_bed.json"
+        PR + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bmk"
     conda:
         "pr.yml"
     shell:
-        '(grep ^">" {input.fasta} '
-        '| tr -d ">" '
-        '| tr "-" "\t" '
-        '| tr ":" "\t" '
-        '| sort -k1,1 -k2,2n '
-        '> {output.bed}) '
-        '2> {log}'
+        'bash src/exfi_exons_to_bed3.sh {input} '
+        '| sort -k 1,1 -k2,2n '
+        '> {output} 2> {log}'
 
 
-
-rule pr_true_positives:
-    """Predicted exons in true"""
+rule pr_chopstitch_exons_to_bed3:
     input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.processedexons.fa"
     output:
-        bed = PR + "true_positives.bed"
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bed"
+    log:
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.log"
+    benchmark:
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bmk"
+    conda:
+        "pr.yml"
+    shell:
+        'bash src/chopstitch_exons_to_bed3.sh {input} '
+        '| sort -k 1,1 -k2,2n '
+        '> {output} 2> {log}'
+
+
+
+rule pr_exfi:
+    input:
+        obs = PR + "{sample}.true.bed",
+        pred = PR + \
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bed"
+    output:
+        PR + \
+         "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}"
     conda:
         "pr.yml"
     shell:
-        "bedtools intersect "
-            "-a {input.pred} "
-            "-b {input.true} "
-            "-f {params.fraction_overlap} "
-            "-r "
-        "> {output.bed}"
+        'bash src/compute_pr.sh '
+            '{input.pred} '
+            '{input.obs} '
+            '{params.identity} '
+        '> {output}'
 
 
 
-rule pr_compute_false_positives:
-    """Predicted exons not in true"""
+rule pr_chopstitch:
     input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
+        obs = PR + "{sample}.true.bed",
+        pred = PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bed"
     output:
-        bed = PR + "false_positives.bed"
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}"
     conda:
         "pr.yml"
     shell:
-        "bedtools intersect "
-            "-a {input.pred} "
-            "-b {input.true} "
-            "-f {params.fraction_overlap} "
-            "-r "
-            "-v "
-        "> {output.bed}"
+        'bash src/compute_pr.sh '
+            '{input.pred} '
+            '{input.obs} '
+            '{params.identity} '
+        '> {output}'
 
 
 
-rule pr_compute_false_negatives:
-    """True exons not in predicted"""
+rule pr_gmap_gff3_to_bed:
     input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
+        gff3 = GMAP + "{sample}.gff3"
     output:
-        bed = PR + "false_negatives.bed"
+        bed = PR + "{sample}.gmap.bed"
+    conda:
+        "pr.yml"
+    log:
+        PR + "{sample}.gmap.bed.log"
+    benchmark:
+        PR + "{sample}.gmap.bed.bmk"
+    shell:
+        'Rscript src/gff3_gmap_to_exon_bed3.R {input} '
+        '| sort -k 1,1 -k2,2n '
+        '> {output} 2> {log}'
+
+
+rule pr_gmap:
+    input:
+        obs = PR + "{sample}.true.bed",
+        pred = PR + "{sample}.gmap.bed"
+    output:
+        PR + "{sample}.gmap.{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}"
     conda:
         "pr.yml"
     shell:
-        "bedtools intersect "
-            "-a {input.true} "
-            "-b {input.pred} "
-            "-f {params.fraction_overlap} "
-            "-r "
-            "-v "
-        "> {output.bed}"
-
-
-rule pr_precision_recall:
-    input:
-        tp = PR + "true_positives.bed",
-        fp = PR + "false_positives.bed",
-        fn = PR + "false_negatives.bed"
-    output:
-        tsv = PR + "pr.tsv"
-    log:
-        PR + "pr.log"
-    benchmark:
-        PR + "precision_recall.json"
-    shell:
-        '(tp=$(wc -l < {input.tp}); '
-        'fp=$(wc -l < {input.fp}); '
-        'fn=$(wc -l < {input.fn}); '
-        'precision=$(echo "$tp / ($tp + $fp)" | bc -l); '
-        'recall=$(echo "$tp / ($tp + $fn)" | bc -l); '
-        'f1=$(echo "2 * $precision * $recall / ($precision + $recall)" | bc -l); '
-        'echo -e tp"\t"fp"\t"fn"\t"precision"\t"recall"\t"f1 > {output.tsv}; '
-        'echo -e $tp"\t"$fp"\t"$fn"\t"$precision"\t"$recall"\t"$f1 >> {output.tsv}) '
-        '2> {log}'
+        'bash src/compute_pr.sh '
+            '{input.pred} '
+            '{input.obs} '
+            '{params.identity} '
+        '> {output}'
