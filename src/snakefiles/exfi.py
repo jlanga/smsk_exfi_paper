@@ -84,15 +84,15 @@ rule exfi_build_baited_bloom_filter_with_sampling:
         tempfile=$(mktemp --dry-run)
         mkfifo $tempfile
 
-        if [ {params.sampling} -ge 100 ]; then
-            pigz -dc {input.reads} > $tempfile &
+        ( if [[ {params.sampling} -ge 100 ]]; then
+            pigz -dc {input.reads} > $tempfile
         else
             seqtk sample \
                 -s 1 \
                 <(pigz -dc {input.reads}) \
                 $(echo "{params.sampling} / 100" | bc -l) \
-            > $tempfile &
-        fi
+            > $tempfile
+        fi ) &
 
         build_baited_bloom_filter \
             --input-fasta {input.transcriptome} \
@@ -104,7 +104,8 @@ rule exfi_build_baited_bloom_filter_with_sampling:
             --verbose \
             $tempfile \
         2> {log}
-        rm reads
+
+        rm $tempfile
         """
 
 
