@@ -13,4 +13,4 @@ dependencies:
     - seqtk=1.3
     - pip
     - pip:
-          - "https://github.com/jlanga/exfi/archive/v1.4.12.tar.gz"
+          - "https://github.com/jlanga/exfi/archive/v1.4.13.tar.gz"
