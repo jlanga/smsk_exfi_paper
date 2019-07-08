@@ -30,14 +30,15 @@ rule bwa_map_exfi:
             "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.fa"
     output:
         bam = BWA + \
-            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.bam"
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bam"
     log:
         BWA + \
-            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.log"
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bam.log"
     benchmark:
         BWA + \
-            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.bmk"
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bam.bmk"
     conda: "bwa.yml"
+    threads: 4
     params:
         index = BWA + "{sample}"
     shell:
@@ -47,9 +48,9 @@ rule bwa_map_exfi:
             "-D 0.1 "
             "{params.index} "
             "{input.exons} "
-        "| samtools view -Shub "
         "| samtools sort "
             "-l 9 "
+            "-@ {threads} "
             "-o {output.bam} "
             "/dev/stdin ) "
         "2> {log} 1>&2"
@@ -58,15 +59,16 @@ rule bwa_map_exfi:
 
 rule bwa_map_chopstitch:
     input:
-        exons = CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.processedexons.fa",
+        exons = CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.exons.fa",
         index = BWA + "{sample}.bwa"
     output:
-        bam = BWA + "{sample}.k{kmer}.fpr{fpr}.processedexons.bam"
+        bam = BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bam"
     log:
-        BWA + "{sample}.k{kmer}.fpr{fpr}.processedexons.log"
+        BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bam.log"
     benchmark:
-         BWA + "{sample}.k{kmer}.fpr{fpr}.processedexons.bmk"
+         BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bam.bmk"
     conda: "bwa.yml"
+    threads: 4
     params:
         index = BWA + "{sample}"
     shell:
@@ -76,9 +78,38 @@ rule bwa_map_chopstitch:
             "-D 0.1 "
             "{params.index} "
             "{input.exons} "
-        "| samtools view -Shub "
+        "| samtools sort "
+            "-@ {threads} "
+            "-l 9 "
+            "-o {output.bam} "
+            "/dev/stdin ) "
+        "2> {log} 1>&2"
+
+
+rule bwa_map_gmap:
+    input:
+        exons = GMAP + "{sample}.exons.fa",
+        index = BWA + "{sample}.bwa"
+    output:
+        bam = BWA + "{sample}.gmap.bam"
+    log:
+        BWA + "{sample}.gmap.bam.log"
+    benchmark:
+         BWA + "{sample}.gmap.bam.bmk"
+    conda: "bwa.yml"
+    threads: 4
+    params:
+        index = BWA + "{sample}"
+    shell:
+        "(bwa mem "
+            "-t {threads} "
+            "-M "
+            "-D 0.1 "
+            "{params.index} "
+            "{input.exons} "
         "| samtools sort "
             "-l 9 "
+            "-@ {threads} "
             "-o {output.bam} "
             "/dev/stdin ) "
         "2> {log} 1>&2"
@@ -88,49 +119,35 @@ rule bwa_map_chopstitch:
 rule bwa_stats_exfi:
     input:
         bam = BWA + \
-            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.bam"
-    output:
-        BWA + \
-            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.stats.tsv"
-    log:
-        BWA + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.stats.log"
-    benchmark:
-        BWA + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.stats.bmk"
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.bam",
+        fa = RAW + "{sample}.rna.fa"
+    output: BWA + \
+        "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.stats.tsv"
+    log: BWA + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.stats.log"
+    benchmark: BWA + \
+        "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi.stats.bmk"
     conda: "bwa.yml"
-    shell:
-        """
-        n=$(samtools view {input.bam} | cut -f 1 | sort -u | wc -l)
-        unmapped=$(samtools view {input.bam} | awk '$3 == "*"' | wc -l)
-        mapped=$(samtools view {input.bam} | awk '$3 != "*"'| cut -f 1 | sort -u | wc -l)
-        perfect=$(samtools view {input.bam} | awk '$6 ~ /^[0-9]+M$/' | cut -f 1 | sort -u | wc -l)
-        unique=$(samtools view {input.bam} | cut -f 1 | sort | uniq -c | awk '$1 == 1' | wc -l)
-        multi=$(samtools view {input.bam} | cut -f 1 | sort | uniq -c | awk '$1 > 1' | wc -l)
-
-        echo exons"\t"unmapped"\t"mapped"\t"perfect_match"\t"uniquely_mapped"\t"multimapped > {output}
-        echo $n"\t"$unmapped"\t"$mapped"\t"$perfect"\t"$unique"\t"$multi >> {output}
-        """
-
+    shell:  'bash src/compute_bwa_stats.sh {input} > {output} 2> {log}'
 
 
 rule bwa_stats_chopstitch:
     input:
-        bam = BWA + "{sample}.k{kmer}.fpr{fpr}.processedexons.bam"
-    output:
-        tsv = BWA + "{sample}.k{kmer}.fpr{fpr}.stats.tsv"
-    log:
-        BWA + "{sample}.k{kmer}.fpr{fpr}.stats.log"
-    benchmark:
-        BWA + "{sample}.k{kmer}.fpr{fpr}.stats.bmk"
-    conda: "bwa.yml"
-    shell:
-        """
-        n=$(samtools view {input.bam} | cut -f 1 | sort -u | wc -l)
-        unmapped=$(samtools view {input.bam} | awk '$3 == "*"' | wc -l)
-        mapped=$(samtools view {input.bam} | awk '$3 != "*"'| cut -f 1 | sort -u | wc -l)
-        perfect=$(samtools view {input.bam} | awk '$6 ~ /^[0-9]+M$/' | cut -f 1 | sort -u | wc -l)
-        unique=$(samtools view {input.bam} | cut -f 1 | sort | uniq -c | awk '$1 == 1' | wc -l)
-        multi=$(samtools view {input.bam} | cut -f 1 | sort | uniq -c | awk '$1 > 1' | wc -l)
+        bam = BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bam",
+        fa = RAW + "{sample}.rna.fa"
+    output: BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.stats.tsv"
+    log: BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.stats.log"
+    benchmark: BWA + "{sample}.k{kmer}.fpr{fpr}.chopstitch.stats.bmk"
+    conda: 'bwa.yml'
+    shell: 'bash src/compute_bwa_stats.sh {input} > {output} 2> {log}'
 
-        echo exons"\t"unmapped"\t"mapped"\t"perfect_match"\t"uniquely_mapped"\t"multimapped > {output.tsv}
-        echo $n"\t"$unmapped"\t"$mapped"\t"$perfect"\t"$unique"\t"$multi >> {output.tsv}
-        """
+
+
+rule bwa_stats_gmap:
+    input:
+        bam = BWA + "{sample}.gmap.bam",
+        fa = RAW + "{sample}.rna.fa"
+    output: BWA + "{sample}.gmap.stats.tsv"
+    log: BWA + '{sample}.gmap.stats.tsv.log'
+    benchmark: BWA + '{sample}.gmap.statsself.tsv.bmk'
+    conda: 'bwa.yml'
+    shell: 'bash src/compute_bwa_stats.sh {input} > {output} 2> {log}'

@@ -26,11 +26,11 @@ rule chopstitch_build_bloom:
         bf = "Bfilter.bf",
         inf = "Bfilter.inf"
     threads:
-        64  # All
+        24  # All
     log:
-        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.full.unbaited.log"
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.full.unbaited.bf.log"
     benchmark:
-        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.full.unbaited.bmk"
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.full.unbaited.bf.bmk"
     shell:
         """
         ./bin/CreateBloom \
@@ -82,3 +82,21 @@ rule chopstitch_find_exons:
         mv {params.exons} {output.exons}
         mv {params.processed_exons} {output.processed_exons}
         """
+
+
+
+rule pr_chopstitch_exons_to_bed3:
+    input:
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.exons.fa"
+    output:
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bed"
+    log:
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.chopstitch.log"
+    benchmark:
+        CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bmk"
+    conda:
+        "chopstitch.yml"
+    shell:
+        'bash src/chopstitch_exons_to_bed3.sh {input} '
+        '| sort -k 1,1 -k2,2n '
+        '> {output} 2> {log}'

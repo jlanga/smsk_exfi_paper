@@ -24,7 +24,7 @@ rule gmap_build:
 rule gmap_align:
     input:
         rna = RAW + "{sample}.rna.fa",
-        index = touch(GMAP + "{sample}/gmap_build.ok")
+        index = GMAP + "{sample}/gmap_build.ok"
     output:
         GMAP + "{sample}.gff3"
     log:
@@ -37,9 +37,9 @@ rule gmap_align:
     conda:
         "gmap.yml"
     threads:
-        32
+        24
     shell:
-        'gmap '
+        'gmapl '
             '--db {params.sample} '
             '--dir {params.gmap_dir} '
             '{input.rna} '
@@ -47,3 +47,21 @@ rule gmap_align:
             '--nthreads {threads} '
         '> {output} '
         '2> {log}'
+
+
+
+rule gmap_extract_exons:
+    input:
+        gff3 = GMAP + '{sample}.gff3',
+        reference = RAW + '{sample}.rna.fa'
+    output:
+        GMAP + '{sample}.exons.fa'
+    log:
+        GMAP + '{sample}.exons.fa.log'
+    benchmark:
+        GMAP + '{sample}.exons.fa.bmk'
+    conda: 'gmap.yml'
+    shell:
+        '(Rscript src/gff3_gmap_to_exon_bed3.R {input} '
+        '| bedtools getfasta -fi {input.reference} -bed /dev/stdin -fo {output}'
+        ') 2> {log}'

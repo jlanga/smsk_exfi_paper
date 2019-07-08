@@ -34,9 +34,9 @@ rule exfi_build_unbaited_bloom_filter:
     threads:
         24
     log:
-        EXFI + "bbf.{sample}.k{kmer}.l{levels}.m{size}.100.unbaited.log"
+        EXFI + "{sample}.k{kmer}.l{levels}.m{size}.100.unbaited.bf.log"
     benchmark:
-        EXFI + "bbf.{sample}.k{kmer}.l{levels}.m{size}.100.unbaited.bmk"
+        EXFI + "{sample}.k{kmer}.l{levels}.m{size}.100.unbaited.bf.bmk"
     conda: "exfi.yml"
     shell:
         "abyss-bloom build "
@@ -72,7 +72,7 @@ rule exfi_build_baited_bloom_filter_with_sampling:
         levels = "{levels}",
         size = "{size}",
     threads:
-        96  # Block everything
+        24  # Block everything
     log:
         EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.baited.bf.log"
     benchmark:
@@ -113,16 +113,14 @@ rule exfi_build_splice_graph:
     input:
         transcriptome = RAW + "{sample}.rna.fa",
         fai = RAW + "{sample}.rna.fa.fai",
-        bloom_filter = protected(
-            expand(
-                EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.bf",
-                sample="{sample}",
-                kmer="{kmer}",
-                levels="{levels}",
-                size="{size}",
-                sampling="{sampling}",
-                type="{type}"
-            )
+        bloom_filter = expand(
+            EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.bf",
+            sample="{sample}",
+            kmer="{kmer}",
+            levels="{levels}",
+            size="{size}",
+            sampling="{sampling}",
+            type="{type}"
         )
     output:
         gfa = EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.gfa"
@@ -131,7 +129,7 @@ rule exfi_build_splice_graph:
         max_fp_bases = params["exfi"]["max_fp_bases"],
         max_overlap = params["exfi"]["max_overlap"],
         max_gap_size =  params["exfi"]["max_gap_size"]
-    threads: 32
+    threads: 24
     log:
         EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.gfa.log"
     benchmark:
@@ -142,7 +140,6 @@ rule exfi_build_splice_graph:
             "--input-fasta {input.transcriptome} "
             "--input-bloom {input.bloom_filter} "
             "--kmer {params.kmer} "
-            "--correct "
             "--polish "
             "--threads {threads} "
             "--max-overlap {params.max_overlap} "
@@ -167,7 +164,7 @@ rule exfi_gfa_to_exons:
         EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exons.bmk"
     conda: "exfi.yml"
     shell:
-        "gfa1_to_exons "
+        "gfa1_to_fasta "
             "--input-gfa {input} "
             "--output-fasta {output} "
             "--verbose "
@@ -189,9 +186,10 @@ rule exfi_gfa_to_gapped_transcript:
         EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.gapped.bmk"
     conda: "exfi.yml"
     shell:
-        "gfa1_to_gapped_transcripts "
+        "gfa1_to_fasta "
             "--input-gfa {input.gfa} "
             "--output-fasta {output.transcripts} "
+            "--gapped-transcript "
             "--verbose "
             "{params.extra} "
         "2> {log}"

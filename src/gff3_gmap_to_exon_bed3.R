@@ -9,9 +9,9 @@ outfile <- file('/dev/stdout', 'w')
 
 
 gff3_to_bed <- function(path){
-    
+
     gff_columns <- c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attribute")
-    
+
     raw <- path %>%
         read_tsv(
             col_names = gff_columns,
@@ -26,25 +26,25 @@ gff3_to_bed <- function(path){
         extract(
             col = attribute,
             into = "transcript_id",
-            regex = 'Target=([A-Za-z0-9_.]+)',
+            regex = 'Target=([A-Za-z0-9_.|]+)',
             remove = TRUE,
             convert = TRUE
         )
-    
+
     positive <- raw %>%
         filter(strand == "+") %>%
         select(-strand) %>%
         group_by(transcript_id) %>%
         arrange(transcript_id, start, end) %>%
         ungroup()
-    
+
     negative <- raw %>%
         filter(strand == "-") %>%
         select(-strand) %>%
         group_by(transcript_id) %>%
         arrange(transcript_id, desc(start), desc(end)) %>%
         ungroup()
-    
+
     rbind(positive, negative) %>%
         mutate(length = end - start + 1) %>%
         group_by(transcript_id) %>%
@@ -65,4 +65,3 @@ infile %>%
     gff3_to_bed() %>%
     format_tsv(col_names = FALSE) %>%
     cat()
-

@@ -6,3 +6,4 @@ channels:
     - defaults
 dependencies:
     - gmap=2018.07.04=pl526he4cf2ce_0
+    - bedtools=2.27.1
