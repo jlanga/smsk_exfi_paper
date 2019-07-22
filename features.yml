@@ -1,14 +1,73 @@
 # Features file for Snakemake
 ---
-reference:
-    exome:
-        data/reference/exome.fa
-    transcriptome:
-        data/reference/transcriptome.fa
+hsap:
     genome:
-        data/reference/genome.fa
+        data/reference/Homo_sapiens.GRCh38.dna.big_chrs.fa
+    transcriptome:
+        data/reference/hsap.cdna.big_chrs.fa
     annotation:
-        data/reference/annotation.gff3
+        data/reference/Homo_sapiens.GRCh38.91.big_chrs.gff3
+    reference_type:
+        ensembl
 
-assembly:
-    data/reference/transcriptome.fa
+drer:
+    genome:
+        data/reference/Danio_rerio.GRCz10.dna.big_chrs.fa
+    transcriptome:
+        data/reference/drer.cdna.big_chrs.fa
+    annotation:
+        data/reference/Danio_rerio.GRCz10.91.big_chrs.gff3
+    reference_type:
+        ensembl
+
+char:
+    genome:
+        data/reference/Clupea_harengus.ASM96633v1.dna.toplevel.fa
+    transcriptome:
+        data/reference/char.clupea_harengus.khmer_trinity.fasta
+    annotation:
+        data/reference/Clupea_harengus.ASM96633v1.gff
+    reference_type:
+        ncbi
+
+ttin:
+    transcriptome:
+        /home/share/assemblies_raw/ttin.tinca_tinca.girish_oldkhmer.fasta
+
+haxy:
+    genome:
+        /home/share/smsk_exfi_paper/data/reference/GCA_003402655.1_Haxy_hC_F2.3_v1_genomic.fna
+    transcriptome:
+        /home/share/raw_data/haxy/Deleury_et_al-2019-Harmonia-exome-capture/haxy.cds.filtered.fa
+
+ssal:
+    genome:
+        /home/share/raw_data/exfi/ssal/GCF_000233375.1_ICSASG_v2_genomic.fna
+    transcriptome:
+        /home/share/raw_data/exfi/ssal/GCF_000233375.1_ICSASG_v2_rna.fna
+    annotation:
+        /home/share/raw_data/exfi/ssal/GCF_000233375.1_ICSASG_v2_genomic.gff
+    reference_type:
+        ncbi
+
+plam:
+    genome:
+        /home/share/raw_data/exfi/plam/GCA_001447015.2_Sugar_pine_JHU_assembly_genomic.fna
+    transcriptome:
+        /home/share/raw_data/exfi/plam/GEUZ01.fasta
+
+amex:
+    genome:
+        /home/share/raw_data/exfi/amex/GCA_002915635.2_ASM291563v2_genomic.fna
+    transcriptome:
+        /home/share/raw_data/exfi/amex/GFZP01.fasta
+
+char_ref:
+    genome:
+        data/reference/Clupea_harengus.ASM96633v1.dna.toplevel.fa
+    transcriptome:
+        /home/share/ieb_testing/reference/Clupea_harengus/GCF_000966335.1_ASM96633v1_rna.fna
+    annotation:
+        data/reference/Clupea_harengus.ASM96633v1.gff
+    reference_type:
+        ncbi

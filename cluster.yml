@@ -1,0 +1,47 @@
+
+# Cluster parameters
+---
+__default__:
+    time: "06:00:00"
+    mem: 1024
+    cpu: 1
+
+bowtie2_index:
+    mem: 30G
+    cpu: 12
+
+bowtie2_map_exfi:
+    mem: 20G
+    cpu: 4
+
+bowtie2_map_chopstitch:
+    mem: 20G
+    cpu: 4
+
+bowtie2_map_gmap:
+    mem: 20G
+    cpu: 4
+
+chopstitch_build_bloom:
+    mem: 32G
+    cpu: 24
+
+exfi_build_unbaited_bloom_filter:
+    mem: 60G
+    cpu: 24
+
+exfi_build_baited_bloom_filter_with_sampling:
+    mem: 60000
+    cpu: 24
+
+exfi_build_splice_graph:
+    mem: 30G
+    cpu: 2
+
+gmap_build:
+    mem: 15G
+    cpu: 1
+
+gmap_align:
+    mem: 15G
+    cpu: 24

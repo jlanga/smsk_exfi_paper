@@ -1,0 +1,11 @@
+# Conda env for quantification
+---
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - hisat2=2.1.0=py35pl5.22.0_0
+    - samtools=1.6=0
+    - stringtie=1.3.3=py35_2
+    - gffcompare=0.9.8=0

@@ -1,139 +1,91 @@
-rule pr_gff3_to_exon_bed:
+def get_gff_type(wildcards):
+    return features[wildcards.sample]["reference_type"]
+
+
+rule pr_exfi:
     input:
-        gff3_gz = RAW + "annotation.gff3.gz"
+        obs = RAW + "{sample}.gff3",
+        pred = EXFI + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.gfa",
+        fasta = RAW + "{sample}.rna.fa"
     output:
-        bed = PR + "true_exons.bed"
-    log:
-        PR + "gff3_to_exon_bed.log"
-    benchmark:
-        PR + "gff3_to_exon_bed.json"
-    conda:
-        "pr.yml"
-    shell:
-        "(Rscript src/gff3_to_exon_bed.R "
-            "{input.gff3_gz} "
-        "| sort -k1,1 -k2,2n "
-        "> {output.bed}) "
-        "2> {log}"
-
-
-
-rule pr_exons_to_bed:
-    input:
-        fasta = EXFI + "exons.fa"
-    output:
-        bed = PR + "pred_exons.bed"
-    log:
-        PR + "exons_to_bed.log"
-    benchmark:
-        PR + "exons_to_bed.json"
-    conda:
-        "pr.yml"
-    shell:
-        '(grep ^">" {input.fasta} '
-        '| tr -d ">" '
-        '| tr "-" "\t" '
-        '| tr ":" "\t" '
-        '| sort -k1,1 -k2,2n '
-        '> {output.bed}) '
-        '2> {log}'
-
-
-
-rule pr_true_positives:
-    """Predicted exons in true"""
-    input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
-    output:
-        bed = PR + "true_positives.bed"
+        PR + \
+            "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi."
+            "{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}",
+        gff_type = get_gff_type
     conda:
         "pr.yml"
+    log:
+        PR + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi."
+        "{identity}.tsv.log"
+    benchmark:
+        PR + "{sample}.k{kmer}.l{levels}.m{size}.{sampling}.{type}.exfi."
+        "{identity}.tsv.bmk"
     shell:
-        "bedtools intersect "
-            "-a {input.pred} "
-            "-b {input.true} "
-            "-f {params.fraction_overlap} "
-            "-r "
-        "> {output.bed}"
+        'compare_to_gff3 '
+            '--input-splice-graph {input.pred} '
+            '--input-fasta {input.fasta} '
+            '--input-gff3 {input.obs} '
+            '--simmilarity-fraction {params.identity} '
+            '--type-gff3 {params.gff_type} '
+            '--verbose '
+        '>{output} '
+        '2>{log}'
 
 
 
-rule pr_compute_false_positives:
-    """Predicted exons not in true"""
+rule pr_chopstitch:
     input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
+        obs = RAW + "{sample}.gff3",
+        pred = CHOPSTITCH + "{sample}.k{kmer}.fpr{fpr}.chopstitch.bed",
+        fasta = RAW + "{sample}.rna.fa"
     output:
-        bed = PR + "false_positives.bed"
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}",
+        gff_type = get_gff_type
     conda:
         "pr.yml"
+    log:
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.{identity}.tsv.log"
+    benchmark:
+        PR + "{sample}.k{kmer}.fpr{fpr}.chopstitch.{identity}.tsv.bmk"
     shell:
-        "bedtools intersect "
-            "-a {input.pred} "
-            "-b {input.true} "
-            "-f {params.fraction_overlap} "
-            "-r "
-            "-v "
-        "> {output.bed}"
+        'compare_to_gff3 '
+            '--input-splice-graph {input.pred} '
+            '--input-fasta {input.fasta} '
+            '--input-gff3 {input.obs} '
+            '--simmilarity-fraction {params.identity} '
+            '--type-gff3 {params.gff_type} '
+            '--verbose '
+        '>{output} '
+        '2>{log}'
 
 
-
-rule pr_compute_false_negatives:
-    """True exons not in predicted"""
+rule pr_gmap:
     input:
-        true= PR + "true_exons.bed",
-        pred= PR + "pred_exons.bed"
+        obs = RAW + "{sample}.gff3",
+        pred = GMAP + "{sample}.gff3",
+        fasta = RAW + "{sample}.rna.fa"
     output:
-        bed = PR + "false_negatives.bed"
+        PR + "{sample}.gmap.{identity}.tsv"
     params:
-        fraction_overlap = params["pr"]["fraction_overlap"]
-    log:
-        PR + "true_positives.log"
-    benchmark:
-        PR + "true_positives.json"
+        identity = "{identity}",
+        gff_type = get_gff_type
     conda:
         "pr.yml"
-    shell:
-        "bedtools intersect "
-            "-a {input.true} "
-            "-b {input.pred} "
-            "-f {params.fraction_overlap} "
-            "-r "
-            "-v "
-        "> {output.bed}"
-
-
-rule pr_precision_recall:
-    input:
-        tp = PR + "true_positives.bed",
-        fp = PR + "false_positives.bed",
-        fn = PR + "false_negatives.bed"
-    output:
-        tsv = PR + "pr.tsv"
     log:
-        PR + "pr.log"
+        PR + "{sample}.gmap.{identity}.tsv.log"
     benchmark:
-        PR + "precision_recall.json"
+        PR + "{sample}.gmap.{identity}.tsv.bmk"
     shell:
-        '(tp=$(wc -l < {input.tp}); '
-        'fp=$(wc -l < {input.fp}); '
-        'fn=$(wc -l < {input.fn}); '
-        'precision=$(echo "$tp / ($tp + $fp)" | bc -l); '
-        'recall=$(echo "$tp / ($tp + $fn)" | bc -l); '
-        'f1=$(echo "2 * $precision * $recall / ($precision + $recall)" | bc -l); '
-        'echo -e tp"\t"fp"\t"fn"\t"precision"\t"recall"\t"f1 > {output.tsv}; '
-        'echo -e $tp"\t"$fp"\t"$fn"\t"$precision"\t"$recall"\t"$f1 >> {output.tsv}) '
-        '2> {log}'
+        'compare_to_gff3 '
+            '--input-splice-graph {input.pred} '
+            '--input-gff3 {input.obs} '
+            '--input-fasta {input.fasta} '
+            '--simmilarity-fraction {params.identity} '
+            '--type-gff3 {params.gff_type} '
+            '--verbose '
+        '>{output} '
+        '2>{log}'

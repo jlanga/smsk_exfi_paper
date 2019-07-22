@@ -1,10 +1,8 @@
-# Conda env for bwa
+# Conda env for chopstitch computations
 ---
 channels:
     - conda-forge
     - bioconda
     - defaults
 dependencies:
-    - bwa=0.7.12
-    - samtools=1.8
-    - bcftools=1.8
+    - bedtools=2.27.1=0
