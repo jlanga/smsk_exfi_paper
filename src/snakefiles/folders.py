@@ -13,3 +13,7 @@ GMAP = "results/gmap/"
 TUXEDO2 = "results/tuxedo2/"
 SNP = "results/snp/"
 BOWTIE2 = "results/bowtie2/"
+
+CHOPSTITCH_R = "results/chopstitch_review/"
+BWA_R = "results/bwa_review/"
+PR_R = "results/pr_review/"
