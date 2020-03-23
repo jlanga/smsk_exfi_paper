@@ -96,7 +96,7 @@ rule pr_chopstitch_review_exons_to_bed3:
     benchmark:
         CHOPSTITCH_R + "{sample}.k_{kmer}.fpr1_{fpr1}.fpr2_{fpr2}.chopstitch.bmk"
     conda:
-        "chopstitch.yml"
+        "pr.yml"
     shell:
         'bash src/chopstitch_exons_to_bed3.sh {input} '
         '| sort -k 1,1 -k2,2n '
@@ -119,6 +119,7 @@ rule pr_chopstitch_review:
         PR_R + "{sample}.k_{kmer}.fpr1_{fpr1}.fpr2_{fpr2}.chopstitch.{identity}.tsv.log"
     benchmark:
         PR_R + "{sample}.k_{kmer}.fpr1_{fpr1}.fpr2_{fpr2}.chopstitch.{identity}.tsv.bmk"
+    conda: "pr.yml  "
     shell:
         'compare_to_gff3 '
             '--input-splice-graph {input.pred} '
